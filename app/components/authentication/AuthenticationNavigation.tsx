@@ -5,16 +5,13 @@ import type { RootState } from '../../stores/store'
 import { Menu, Transition } from "@headlessui/react"
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
-import { loggedIn } from '../../slices/authSlice'
+import { loggedIn, logOut } from '../../slices/authSlice'
+import { useRouter } from 'next/router'
 
 const navigation = [
   { name: "Settings", to: "/settings" },
 ]
 const redirectRoute = "/"
-async function logout() {
-    // authStore.logOut()
-    // await navigateTo(redirectRoute)
-}
 
 const renderNavLinks = (active: boolean) => {
     return navigation.map((nav) => (
@@ -55,6 +52,12 @@ const renderUser = (loggedIn: boolean) => {
 export default function AuthenticationNavigation() {
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state))
+
+    const logout = () => {
+        const router = useRouter()
+        dispatch(logOut())
+        router.push(redirectRoute)
+    }
 
     return (
         <div>
