@@ -1,9 +1,10 @@
-import { Dispatch, PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { IUserProfile } from '../interfaces';
-import { getTokens } from './tokensSlice';
+import { Dispatch, PayloadAction, createSlice, current } from '@reduxjs/toolkit'
+import { IEnableTOTP, IUserOpenProfileCreate, IUserProfile, IUserProfileUpdate, IWebToken } from '../interfaces';
 import { RootState } from '../stores/store';
 import { tokenIsTOTP, tokenParser } from "@/utilities"
 import { addNotice } from './toastsSlice';
+import { apiAuth } from '../api';
+import { setMagicToken, deleteTokens } from './tokensSlice';
 
 interface AuthState {
   id: string,
@@ -43,32 +44,231 @@ export const authSlice = createSlice({
       state.password = action.payload.password
       state.totp = action.payload.totp
     },
+    setTOTPAuthentication: (state: AuthState, action: PayloadAction<boolean>) => {
+      state.totp = action.payload
+    },
+    setEmailValidation: (state: AuthState, action: PayloadAction<boolean>) => {
+      state.email_validated = action.payload
+    },
+    logOut: () => {
+      initialState
+    }
   },
 })
 
-export const { setUserProfile } = authSlice.actions
+export const { setUserProfile, setTOTPAuthentication, setEmailValidation, logOut } = authSlice.actions
 
-export const logIn = (token: string) => 
-    async (dispatch: Dispatch, getState: () => RootState) => {
-      try {
-        const access_token = getState().tokens.access_token
-        if (token && !tokenIsTOTP(token) && access_token) {
-          try {
-            const { data: response } = await apiAuth.getProfile(access_token)
-            if (response.value) dispatch(setUserProfile(response.value))
-          } catch (error) {
-            dispatch(logOut())
-          }
+export const isAdmin = (state: RootState) => {
+  return (
+    state.auth.id &&
+    state.auth.is_superuser &&
+    state.auth.is_active
+  )
+}
+export const profile = (state: RootState) => state
+export const loggedIn =  (state: RootState) => state.auth.id !== ""
+
+export const getUserProfile = (token: string) => 
+    async (dispatch: Dispatch) => {
+      if (token && !tokenIsTOTP(token)) {
+        try {
+          const { data: response } = await apiAuth.getProfile(token)
+          if (response.value) dispatch(setUserProfile(response.value))
+        } catch (error) {
+          dispatch(addNotice({
+            title: "Login error",
+            content: "Please check your details, or internet connection, and try again.",
+            icon: "error"
+          }))
+          dispatch(logOut())
         }
+      }
+    }
+
+export const createUserProfile = (payload: IUserOpenProfileCreate) => 
+  async (dispatch: Dispatch) => {
+    try {
+      const { data: response } = await apiAuth.createProfile(payload)
+      if (response.value) dispatch(setUserProfile(response.value))
+    } catch (error) {
+      dispatch(addNotice({
+        title: "Login creation error",
+        content: "Please check your details, or internet connection, and try again.",
+        icon: "error"
+      }))
+    }
+  } 
+
+export const updateUserProfile = (payload: IUserProfileUpdate) => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (loggedIn(currentState) && currentState.tokens.access_token) {
+      try {
+        const { data: response } = await apiAuth.updateProfile(currentState.tokens.access_token, payload)
+        if (response.value) {
+          dispatch(setUserProfile(response.value))
+          dispatch(addNotice({
+            title: "Profile update",
+            content: "Your settings have been updated.",
+          }))
+        } else throw "Error"
+      } catch (error) {
+        dispatch(addNotice({
+          title: "Profile update error",
+          content: "Please check your submission, or internet connection, and try again.",
+          icon: "error"
+        }))
+      }
+    }
+  } 
+ 
+export const enableTOTPAuthentication = (payload: IEnableTOTP) => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (loggedIn(currentState) && currentState.tokens.access_token) {
+      try {
+        const { data: response } = await apiAuth.enableTOTPAuthentication(currentState.tokens.access_token, payload)
+        if (response.value) {
+          dispatch(setTOTPAuthentication(true))
+          dispatch(addNotice({
+            title: "Two-factor authentication",
+            content: response.value.msg,
+          }))
+        } else throw "Error"
+      } catch (error) {
+        dispatch(addNotice({
+          title: "Error enabling two-factor authentication",
+          content: "Please check your submission, or internet connection, and try again.",
+          icon: "error"
+        }))
+      }
+    }
+  } 
+
+export const disableTOTPAuthentication = (payload: IUserProfileUpdate) => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (loggedIn(currentState) && currentState.tokens.access_token) {
+      try {
+        const { data: response } = await apiAuth.disableTOTPAuthentication(currentState.tokens.access_token, payload)
+        if (response.value) {
+          dispatch(setTOTPAuthentication(false))
+          dispatch(addNotice({
+            title: "Two-factor authentication",
+            content: response.value.msg,
+          }))
+        } else throw "Error"
+      } catch (error) {
+        dispatch(addNotice({
+          title: "Error disabling two-factor authentication",
+          content: "Please check your submission, or internet connection, and try again.",
+          icon: "error"
+        }))
+      }
+    }
+  } 
+
+export const sendEmailValidation = () => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (currentState.tokens.access_token && !currentState.auth.email_validated) {
+      try {
+        const { data: response } = await apiAuth.requestValidationEmail(currentState.tokens.access_token)
+        if (response.value) {
+          dispatch(addNotice({
+            title: "Validation sent",
+            content: response.value.msg,
+          }))
+        } else throw "Error"
+      } catch (error) {
+        dispatch(addNotice({
+          title: "Validation error",
+          content: "Please check your email and try again.",
+          icon: "error"
+      }))
+      }
+    }
+  } 
+
+export const validateEmail = (validationToken: string) => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (currentState.tokens.access_token && !currentState.auth.email_validated) {
+      try {
+        const { data: response } = await apiAuth.validateEmail(
+          currentState.tokens.access_token,
+          validationToken
+        )
+        if (response.value) {
+          dispatch(setEmailValidation(true))
+          dispatch(addNotice({
+            title: "Success",
+            content: response.value.msg,
+      }))
+        } else throw "Error"
+      } catch (error) {
+        dispatch(addNotice({
+          title: "Validation error",
+          content: "Invalid token. Check your email and resend validation.",
+          icon: "error"
+      }))
+      }
+    }
+  } 
+
+export const recoverPassword = (email: string) => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (!loggedIn(currentState)) {
+      try {
+        const { data: response } = await apiAuth.recoverPassword(email)
+        if (response.value) {
+          if (response.value.hasOwnProperty("claim")) 
+            dispatch(setMagicToken(response.value as unknown as IWebToken))
+            dispatch(addNotice({
+            title: "Success",
+            content: "If that login exists, we'll send you an email to reset your password.",
+          }))
+        } else throw "Error"
       } catch (error) {
         dispatch(addNotice({
           title: "Login error",
           content: "Please check your details, or internet connection, and try again.",
           icon: "error"
         }))
-        dispatch(logOut())
+        dispatch(deleteTokens())
       }
     }
- 
+} 
+
+export const resetPassword = (password: string, token: string) => 
+  async (dispatch: Dispatch, getState: () => RootState) => {
+    const currentState = getState()
+    if (!loggedIn(currentState)) {
+      try {
+        const claim: string = currentState.tokens.access_token
+        // Check the two magic tokens meet basic criteria
+        const localClaim = tokenParser(claim)
+        const magicClaim = tokenParser(token)
+        if (localClaim.hasOwnProperty("fingerprint") 
+            && magicClaim.hasOwnProperty("fingerprint")
+            && localClaim["fingerprint"] === magicClaim["fingerprint"]) {
+          const { data: response } = await apiAuth.resetPassword(password, claim, token)
+          if (response.value) dispatch(addNotice({
+            title: "Success",
+            content: response.value.msg,
+          }))
+          else throw "Error"
+        }
+      } catch (error) {
+        dispatch(addNotice({
+          title: "Login error",
+          content: "Ensure you're using the same browser and that the token hasn't expired.",
+          icon: "error"
+        }))
+        dispatch(deleteTokens())
+      }
+    }
+} 
 
 export default authSlice.reducer
