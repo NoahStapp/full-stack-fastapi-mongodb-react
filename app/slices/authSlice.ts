@@ -1,7 +1,7 @@
 import { Dispatch, PayloadAction, createSlice, current } from '@reduxjs/toolkit'
 import { IEnableTOTP, IUserOpenProfileCreate, IUserProfile, IUserProfileUpdate, IWebToken } from '../interfaces';
 import { RootState } from '../stores/store';
-import { tokenIsTOTP, tokenParser } from "@/utilities"
+import { tokenIsTOTP, tokenParser } from "../utilities"
 import { addNotice } from './toastsSlice';
 import { apiAuth } from '../api';
 import { setMagicToken, deleteTokens } from './tokensSlice';
@@ -27,7 +27,6 @@ const initialState: AuthState = {
   password: false,
   totp: false
 };
-
 
 
 export const authSlice = createSlice({

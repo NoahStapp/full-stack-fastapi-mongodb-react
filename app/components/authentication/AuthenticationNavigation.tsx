@@ -1,11 +1,12 @@
 
 
-import { useAuthStore } from "@/stores"
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import type { RootState } from '../../stores/store'
 import { Menu, Transition } from "@headlessui/react"
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
+import { loggedIn } from '../../slices/authSlice'
 
-// const authStore = useAuthStore
 const navigation = [
   { name: "Settings", to: "/settings" },
 ]
@@ -26,13 +27,10 @@ const renderNavLinks = (active: boolean) => {
     ))
 }
 
-
-export default function AuthenticationNavigation() {
-    return (
-        <div>
-            {/* <!-- Profile dropdown --> */}
-            <Menu as="div" className="relative ml-3">
-            <div v-if="!authStore.loggedIn">
+const renderUser = (loggedIn: boolean) => {
+    if (!loggedIn) {
+        return (
+            <div>
                 <Link 
                     href="/login"
                     className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2"
@@ -40,12 +38,29 @@ export default function AuthenticationNavigation() {
                     <ArrowLeftOnRectangleIcon className="block h-6 w-6" />
                 </Link>
             </div>
-            <div v-else>
+        )
+    } else {
+        return (
+            <div>
                 <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
                 <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                 </Menu.Button>
             </div>
+        )
+    }
+}
+
+
+export default function AuthenticationNavigation() {
+    const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state))
+
+    return (
+        <div>
+            {/* <!-- Profile dropdown --> */}
+            <Menu as="div" className="relative ml-3">
+            {renderUser(isLoggedIn)}
             <Transition 
             enter="transition ease-out duration-200" 
             enterFrom="transform opacity-0 scale-95" 

@@ -1,6 +1,6 @@
 import { ITokenResponse, IWebToken } from "@/interfaces"
-import { apiAuth } from "@/api"
-import { tokenExpired, tokenParser } from "@/utilities"
+import { apiAuth } from "../api"
+import { tokenExpired, tokenParser } from "../utilities"
 import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { addNotice } from "./toastsSlice";
 
@@ -20,10 +20,10 @@ export const tokensSlice = createSlice({
     name: 'tokens',
     initialState,
     reducers: {
-        setMagicToken: (state: TokensState, action: PayloadAction<IWebToken>) {
+        setMagicToken: (state: TokensState, action: PayloadAction<IWebToken>) => {
             state.access_token = action.payload.claim
           },
-        setTokens (state: TokensState, action: PayloadAction<ITokenResponse>) {
+        setTokens: (state: TokensState, action: PayloadAction<ITokenResponse>) => {
             state.access_token = action.payload.access_token
             state.refresh_token = action.payload.refresh_token
             state.token_type = action.payload.token_type
