@@ -4,6 +4,7 @@ import { Disclosure } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
 import AlertsButton from "./alerts/AlertsButton"
+import AuthenticationNavigation from "./authentication/AuthenticationNavigation"
 
 // const { t } = useI18n()
 const navigation = [
@@ -57,7 +58,7 @@ export default function Navigation() {
                                 {/* <PwaBadge /> */}
     {/* <PwaInstallPrompt /> */}
                                 <AlertsButton />
-    {/* <AuthenticationNavigation /> */}
+                                <AuthenticationNavigation /> 
                             </div>
                         </div>
                     </div><Disclosure.Panel className="sm:hidden">

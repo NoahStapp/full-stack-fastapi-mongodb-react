@@ -19,7 +19,12 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@": [
+        "/Users/nstapp/Github/full-stack-fastapi-mongodb/{{cookiecutter.project_slug}}/frontend"
+      ],
+      "@/*": [
+        "/Users/nstapp/Github/full-stack-fastapi-mongodb/{{cookiecutter.project_slug}}/frontend/*"
+      ],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

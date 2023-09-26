@@ -1,24 +1,21 @@
 
 
-import { useAuthStore } from "@/app/stores"
+import { useAuthStore } from "@/stores"
 import { Menu, Transition } from "@headlessui/react"
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 
-const authStore = useAuthStore
+// const authStore = useAuthStore
 const navigation = [
   { name: "Settings", to: "/settings" },
 ]
 const redirectRoute = "/"
 async function logout() {
-    authStore.logOut()
+    // authStore.logOut()
     // await navigateTo(redirectRoute)
-
-    
 }
 
 const renderNavLinks = (active: boolean) => {
-    console.log("Active: ", active)
     return navigation.map((nav) => (
         <Link
             href={nav.to}
