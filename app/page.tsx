@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import HomeLayout from './layouts/home'
 
-export default function Home() {
+export default function Page() {
   return (
     <main>
     <div className="overflow-hidden pt-8 sm:pt-12 lg:relative lg:py-48">
@@ -79,4 +79,4 @@ export default function Home() {
   )
 }
 
-Home.getLayout = (page: any) => <HomeLayout>{page}</HomeLayout>
+Page.getLayout = (page: any) => <HomeLayout>{page}</HomeLayout>
