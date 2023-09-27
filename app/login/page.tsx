@@ -7,7 +7,7 @@ import { getTokens } from '../slices/tokensSlice'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { tokenIsTOTP, tokenParser } from '../utilities'
 import { Switch } from '@headlessui/react'
-import { FormEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormRegister, useForm } from 'react-hook-form';
 import Link from 'next/link'
 
@@ -80,8 +80,7 @@ export default function Page() {
       } = useForm();
 
     async function submit(data: FieldValues) {
-        console.log(data)
-        await dispatch(getTokens({ username: data["username"], password: data["password"]}))
+        await dispatch(getTokens({ username: data["email"], password: data["password"]}))
         await dispatch(getUserProfile(accessToken))
             if (isLoggedIn) 
                 return redirectTo(redirectAfterLogin)

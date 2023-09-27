@@ -38,23 +38,18 @@ export const { setMagicToken, setTokens, deleteTokens } = tokensSlice.actions
 
 export const getTokens = (payload: { username: string; password?: string }) => {
     return async (dispatch: Dispatch) => {
-        let response
         try {
-            if (payload.password !== undefined) (
-                { data: response } = await apiAuth.loginWithOauth(
+            if (payload.password !== undefined) {
+                const response = await apiAuth.loginWithOauth(
                     payload.username,
                     payload.password
                 )
-            )
-            else (
-                { data: response } = await apiAuth.loginWithMagicLink(
-                    payload.username
-                )
-            )
-            if (response.value) {
-                if (response.value.hasOwnProperty("claim")) dispatch(setMagicToken(response.value as unknown as IWebToken))
-                else dispatch(setTokens(response.value as unknown as ITokenResponse))
-            } else throw "Error"
+                dispatch(setTokens(response))
+              }
+            else {
+              const response = await apiAuth.loginWithMagicLink(payload.username)
+              dispatch(setMagicToken(response))
+            }
         } catch (error) {
             dispatch(addNotice({
                 title: "Login error",
@@ -76,12 +71,10 @@ export const validateMagicTokens = (token: string) =>
             if (localClaim.hasOwnProperty("fingerprint") 
                 && magicClaim.hasOwnProperty("fingerprint")
                 && localClaim["fingerprint"] === magicClaim["fingerprint"]) {
-              const { data: response } = await apiAuth.validateMagicLink(
+              const response = await apiAuth.validateMagicLink(
                 token, { "claim": data }
               )
-                if (response.value) {
-                    dispatch(setTokens(response.value as unknown as ITokenResponse))
-                } else throw "Error"
+              dispatch(setTokens(response))
             }
         } catch (error) {
             dispatch(addNotice({
@@ -97,10 +90,8 @@ export const validateTOTPClaim = (data: string) =>
     async (dispatch: Dispatch, getState: () => TokensState) => {
         try {
             const access_token = getState().access_token
-            const { data: response } = await apiAuth.loginWithTOTP(access_token, { "claim": data })
-            if (response.value) {
-              dispatch(setTokens(response.value as unknown as ITokenResponse))
-            } else throw "Error"
+            const response = await apiAuth.loginWithTOTP(access_token, { "claim": data })
+            dispatch(setTokens(response))
           } catch (error) {
             dispatch(addNotice({
               title: "Two-factor error",
@@ -119,8 +110,8 @@ export const refreshTokens = () =>
           hasExpired = currentState.refresh_token ? tokenExpired(currentState.refresh_token) : true
           if (!hasExpired) {
             try {
-              const { data: response } = await apiAuth.getRefreshedToken(currentState.refresh_token)
-              if (response.value) dispatch(setTokens(response.value))
+              const response = await apiAuth.getRefreshedToken(currentState.refresh_token)
+              dispatch(setTokens(response))
             } catch (error) {
               dispatch(deleteTokens())
             } 
