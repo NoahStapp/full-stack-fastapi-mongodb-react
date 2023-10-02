@@ -18,7 +18,6 @@ import Link from 'next/link'
 // });
 
 
-// const oauth = ref(false)
 // const schema = {
 //     email: { email: true, required: true },
 //     password: { min: 8, max: 64 },

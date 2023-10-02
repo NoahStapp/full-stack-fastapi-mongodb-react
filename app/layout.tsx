@@ -1,7 +1,6 @@
-import './globals.css'
+import './assets/css/main.css'
 import type { Metadata } from 'next'
 import Navigation from './components/Navigation'
-import { store } from './stores/store'
 import { ReduxProvider } from './reduxProvider'
 
 export const metadata: Metadata = {

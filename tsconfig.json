@@ -20,10 +20,10 @@
     ],
     "paths": {
       "@": [
-        "/Users/nstapp/Github/full-stack-fastapi-mongodb/{{cookiecutter.project_slug}}/frontend"
+        "/Users/nstapp/Github/full-stack-fastapi-mongodb-react/app/"
       ],
       "@/*": [
-        "/Users/nstapp/Github/full-stack-fastapi-mongodb/{{cookiecutter.project_slug}}/frontend/*"
+        "/Users/nstapp/Github/full-stack-fastapi-mongodb-react/app/*"
       ],
     }
   },

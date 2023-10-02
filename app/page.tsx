@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import HomeLayout from './layouts/home'
 
 export default function Page() {
   return (
@@ -78,5 +77,3 @@ export default function Page() {
   </main>
   )
 }
-
-Page.getLayout = (page: any) => <HomeLayout>{page}</HomeLayout>
