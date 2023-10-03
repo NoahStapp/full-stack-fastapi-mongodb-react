@@ -3,6 +3,9 @@ import path from 'path'
 import matter from 'gray-matter'
 import { remark } from 'remark'
 import html from 'remark-html'
+import remarkGfm from 'remark-gfm'
+import remarkToc from 'remark-toc'
+
 
 const postsDirectory = path.join(process.cwd(), 'app/content/blog') 
 
@@ -94,8 +97,8 @@ export function getAllPostIds() {
 
 // --------------------------------
 // GET THE DATA OF A SINGLE POST FROM THE ID
-export async function getPostData(id: string) {
-  const fullPath = path.join(postsDirectory, `${id}.md`)
+export async function getPostData(id: string, directory: string = postsDirectory) {
+  const fullPath = path.join(directory, `${id}.md`)
   const fileContents = fs.readFileSync(fullPath, 'utf8')
 
   // Use gray-matter to parse the post metadata section
@@ -104,6 +107,8 @@ export async function getPostData(id: string) {
   // Use remark to convert markdown into HTML string
   const processedContent = await remark()
     .use(html)
+    .use(remarkGfm)
+    .use(remarkToc)
     .process(matterResult.content)
   const content = processedContent.toString()
 
@@ -111,6 +116,6 @@ export async function getPostData(id: string) {
   return {
     id,
     content,
-    ...(matterResult.data as { publishedAt: string; title: string; author: string}),
+    ...(matterResult.data as { publishedAt: string; title: string; author: string; description: string; }),
   }
 }

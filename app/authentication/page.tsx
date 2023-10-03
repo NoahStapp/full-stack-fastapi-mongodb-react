@@ -13,11 +13,11 @@ type Post = {
 const aboutPath = "app/content/"
 
 export const metadata: Metadata = {
-    title: "Getting started with a base project",
+    title: "Authentication with Magic and Oauth2",
 }
 
-export default async function About() {
-  const data: Post = await getPostData("about", aboutPath)
+export default async function Authentication() {
+  const data: Post = await getPostData("authentication", aboutPath)
 
   return (
     <>

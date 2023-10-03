@@ -4,7 +4,6 @@ description: "Accelerate your next web development project with this FastAPI/Nux
 navigation: false
 ---
 
-
 # Getting started with a base project
 
 Accelerate your next web development project with this FastAPI/Nuxt.js base project generator.
@@ -119,9 +118,9 @@ The input variables, with their default values (some auto generated) are:
 
 ## How to deploy
 
-This stack can be adjusted and used with several deployment options that are compatible with Docker Compose, but it is designed to be used in a cluster controlled with pure Docker in Swarm Mode with a Traefik main load balancer proxy handling automatic HTTPS certificates, using the ideas from <a href="https://dockerswarm.rocks" target="_blank">DockerSwarm.rocks</a>.
+This stack can be adjusted and used with several deployment options that are compatible with Docker Compose, but it is designed to be used in a cluster controlled with pure Docker in Swarm Mode with a Traefik main load balancer proxy handling automatic HTTPS certificates, using the ideas from [DockerSwarm.rocks](https://dockerswarm.rocks).
 
-Please refer to <a href="https://dockerswarm.rocks" target="_blank">DockerSwarm.rocks</a> to see how to deploy such a cluster in 20 minutes.
+Please refer to [DockerSwarm.rocks](https://dockerswarm.rocks) to see how to deploy such a cluster in 20 minutes.
 
 ## More details
 

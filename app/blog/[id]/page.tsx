@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
+// -< Post >-
 export default async function Post({ params }: Props) {
   const data: Post = await getPostData(params.id)
 
