@@ -2,6 +2,7 @@ import './assets/css/main.css'
 import type { Metadata } from 'next'
 import Navigation from './components/Navigation'
 import { ReduxProvider } from './reduxProvider'
+import Footer from './components/Footer'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,12 +22,12 @@ export default function RootLayout({
             <slot name="header" >
                 <Navigation />
             </slot>
-            {/* <slot name="footer" >
-                <LayoutsNotification />
-                <LayoutsDefaultFooter />
-            </slot> */}
           </div>
           {children}
+          <slot name="footer" >
+            {/* <LayoutsNotification /> */}
+            <Footer />
+          </slot>
         </body>
       </html>
     </ReduxProvider>
