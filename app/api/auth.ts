@@ -14,12 +14,12 @@ import { apiCore } from "./core"
 export const apiAuth = {
   // TEST
   async getTestText() {
-    const res = await fetch(`${apiCore.url()}/users/tester`)
+    const res = await fetch(`${apiCore.url}/users/tester`)
     return await res.json() as IMsg
   },
   // LOGIN WITH MAGIC LINK OR OAUTH2 (USERNAME/PASSWORD)
   async loginWithMagicLink(email: string) {
-    const res = await fetch(`${apiCore.url()}/login/magic/${email}`,
+    const res = await fetch(`${apiCore.url}/login/magic/${email}`,
       {
         method: "POST",
       }
@@ -27,7 +27,7 @@ export const apiAuth = {
     return await res.json() as IWebToken
   },
   async validateMagicLink(token: string, data: IWebToken) {
-    const res = await fetch(`${apiCore.url()}/login/claim`,
+    const res = await fetch(`${apiCore.url}/login/claim`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -42,7 +42,7 @@ export const apiAuth = {
     const params = new URLSearchParams()
     params.append("username", username)
     params.append("password", password)
-    const res = await fetch(`${apiCore.url()}/login/oauth`,
+    const res = await fetch(`${apiCore.url}/login/oauth`,
       {
         method: "POST",
         body: params,
@@ -54,7 +54,7 @@ export const apiAuth = {
   },
   // TOTP SETUP AND AUTHENTICATION
   async loginWithTOTP(token: string, data: IWebToken) {
-    const res = await fetch(`${apiCore.url()}/login/totp`,
+    const res = await fetch(`${apiCore.url}/login/totp`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -64,7 +64,7 @@ export const apiAuth = {
     return await res.json() as ITokenResponse
   },
   async requestNewTOTP(token: string) {
-    const res = await fetch(`${apiCore.url()}/users/new-totp`,
+    const res = await fetch(`${apiCore.url}/users/new-totp`,
       {
         method: "POST",
         headers: apiCore.headers(token)
@@ -73,7 +73,7 @@ export const apiAuth = {
     return await res.json() as INewTOTP
   },
   async enableTOTPAuthentication(token: string, data: IEnableTOTP) {
-    const res = await fetch(`${apiCore.url()}/login/totp`,
+    const res = await fetch(`${apiCore.url}/login/totp`,
       {
         method: "PUT",
         body: JSON.stringify(data),
@@ -83,7 +83,7 @@ export const apiAuth = {
     return await res.json() as IMsg
   },
   async disableTOTPAuthentication(token: string, data: IUserProfileUpdate) {
-    const res = await fetch(`${apiCore.url()}/login/totp`, 
+    const res = await fetch(`${apiCore.url}/login/totp`, 
       {
         method: "DELETE",
         body: JSON.stringify(data),
@@ -94,7 +94,7 @@ export const apiAuth = {
   },
   // MANAGE JWT TOKENS (REFRESH / REVOKE)
   async getRefreshedToken(token: string) {
-    const res = await fetch(`${apiCore.url()}/login/refresh`,
+    const res = await fetch(`${apiCore.url}/login/refresh`,
       {
         method: "POST",
         headers: apiCore.headers(token)
@@ -103,7 +103,7 @@ export const apiAuth = {
     return await res.json() as ITokenResponse
   },
   async revokeRefreshedToken(token: string) {
-    const res = await fetch(`${apiCore.url()}/login/revoke`,
+    const res = await fetch(`${apiCore.url}/login/revoke`,
       {
         method: "POST",
         headers: apiCore.headers(token)
@@ -113,7 +113,7 @@ export const apiAuth = {
   },
   // USER PROFILE MANAGEMENT
   async createProfile(data: IUserOpenProfileCreate) {
-    const res = await fetch(`${apiCore.url()}/users/`, 
+    const res = await fetch(`${apiCore.url}/users/`, 
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -122,7 +122,7 @@ export const apiAuth = {
     return await res.json() as IUserProfile
   },
   async getProfile(token: string) {
-    const res = await fetch(`${apiCore.url()}/users/`,
+    const res = await fetch(`${apiCore.url}/users/`,
       {
         headers: apiCore.headers(token)
       }
@@ -130,7 +130,7 @@ export const apiAuth = {
     return await res.json() as IUserProfile
   },
   async updateProfile(token: string, data: IUserProfileUpdate) {
-    const res = await fetch(`${apiCore.url()}/users/`, 
+    const res = await fetch(`${apiCore.url}/users/`, 
       {
         method: "PUT",
         body: JSON.stringify(data),
@@ -141,7 +141,7 @@ export const apiAuth = {
   },
   // ACCOUNT RECOVERY
   async recoverPassword(email: string) {
-    const res = await fetch(`${apiCore.url()}/login/recover/${email}`,
+    const res = await fetch(`${apiCore.url}/login/recover/${email}`,
       {
         method: "POST",
       }
@@ -149,7 +149,7 @@ export const apiAuth = {
     return await res.json() as IMsg | IWebToken 
   },
   async resetPassword(password: string, claim: string, token: string) {
-    const res = await fetch(`${apiCore.url()}/login/reset`,
+    const res = await fetch(`${apiCore.url}/login/reset`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -162,7 +162,7 @@ export const apiAuth = {
     return await res.json() as IMsg
   },
   async requestValidationEmail(token: string) {
-    const res = await fetch(`${apiCore.url()}/users/send-validation-email`,
+    const res = await fetch(`${apiCore.url}/users/send-validation-email`,
       {
         method: "POST",
         headers: apiCore.headers(token)
@@ -171,7 +171,7 @@ export const apiAuth = {
     return await res.json() as IMsg
   },
   async validateEmail(token: string, validation: string) {
-    const res = await fetch(`${apiCore.url()}/users/validate-email`,
+    const res = await fetch(`${apiCore.url}/users/validate-email`,
       {
         method: "POST",
         body: JSON.stringify({ validation }),
@@ -182,7 +182,7 @@ export const apiAuth = {
   },
   // ADMIN USER MANAGEMENT
   async getAllUsers(token: string) {
-    const res = await fetch(`${apiCore.url()}/users/all`,
+    const res = await fetch(`${apiCore.url}/users/all`,
       {
         headers: apiCore.headers(token)
       }
@@ -190,7 +190,7 @@ export const apiAuth = {
     return await res.json() as IUserProfile[]
   },
   async toggleUserState(token: string, data: IUserProfileUpdate) {
-    const res = await fetch(`${apiCore.url()}/users/toggle-state`, 
+    const res = await fetch(`${apiCore.url}/users/toggle-state`, 
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -200,7 +200,7 @@ export const apiAuth = {
     return await res.json() as IMsg
   },
   async createUserProfile(token: string, data: IUserProfileCreate) {
-    const res = await fetch(`${apiCore.url()}/users/create`, 
+    const res = await fetch(`${apiCore.url}/users/create`, 
       {
         method: "POST",
         body: JSON.stringify(data),

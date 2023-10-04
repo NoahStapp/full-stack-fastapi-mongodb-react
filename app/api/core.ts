@@ -1,10 +1,5 @@
 export const apiCore = {
-  url(): string {
-    return useRuntimeConfig().public.apiUrl
-  },
-  // WS(): string {
-  //   return useRuntimeConfig().public.apiWS
-  // },
+  url: process.env.NEXT_PUBLIC_API_URL,
   headers(token: string) {
     return {
         "Cache-Control": "no-cache",

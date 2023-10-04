@@ -91,7 +91,7 @@ export default function Page() {
 
     useEffect(() => {
         if (searchParams && searchParams.get("oauth")) setOauth(true)
-      });
+      })
 
     return (
         <main className="flex min-h-full">
@@ -114,11 +114,9 @@ export default function Page() {
 
                     {PasswordBlock(register, errors, oauth)}
 
-                    <div>
-                        <button type="submit" className="flex w-full justify-center rounded-md border border-transparent bg-rose-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2">
-                        Submit
-                        </button>
-                    </div>
+                    <button type="submit" className="flex w-full justify-center rounded-md border border-transparent bg-rose-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2">
+                    Submit
+                    </button>
                     </form>
                 </div>
 

@@ -1,6 +1,7 @@
 import './assets/css/main.css'
 import type { Metadata } from 'next'
 import Navigation from './components/Navigation'
+import Notification from './components/Notification'
 import { ReduxProvider } from './reduxProvider'
 import Footer from './components/Footer'
 
@@ -25,7 +26,7 @@ export default function RootLayout({
           </div>
           {children}
           <slot name="footer" >
-            {/* <LayoutsNotification /> */}
+            <Notification />
             <Footer />
           </slot>
         </body>

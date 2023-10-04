@@ -1,6 +1,7 @@
 import { Dispatch, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { INotification } from "@/interfaces"
 import { generateUUID } from "../utilities"
+import { RootState } from '../stores/store';
 
 interface ToastsState {
     notifications: INotification[]
@@ -21,7 +22,7 @@ export const toastsSlice = createSlice({
         },
         removeNotice: (state: ToastsState, action: PayloadAction<INotification>) => {
             state.notifications = state.notifications.filter(
-            (note) => note !== action.payload
+                (notice) => notice.uid !== action.payload.uid
             )
         },
         deleteNotices: () => {
@@ -42,8 +43,8 @@ export const timeoutNotice = (payload: INotification, timeout: number = 2000) =>
         })
     }
 
-export const first = (state: ToastsState) => state.notifications.length > 0 && state.notifications[0]
-export const notices = (state: ToastsState) => state.notifications
+export const first = (state: RootState) => state.toasts.notifications.length > 0 && state.toasts.notifications[0]
+export const notices = (state: RootState) => state.toasts.notifications
 
 
 export default toastsSlice.reducer
