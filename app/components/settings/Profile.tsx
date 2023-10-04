@@ -1,3 +1,4 @@
+'use client'
 
 import { IUserProfileUpdate } from "../../interfaces"
 import { useAppDispatch, useAppSelector } from "../../hooks"
