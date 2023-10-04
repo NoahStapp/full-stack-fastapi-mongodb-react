@@ -64,7 +64,7 @@ export const isAdmin = (state: RootState) => {
     state.auth.is_active
   )
 }
-export const profile = (state: RootState) => state
+export const profile = (state: RootState) => state.auth
 export const loggedIn =  (state: RootState) => state.auth.id !== ""
 
 export const getUserProfile = (token: string) => 
@@ -103,9 +103,9 @@ export const updateUserProfile = (payload: IUserProfileUpdate) =>
     const currentState = getState()
     if (loggedIn(currentState) && currentState.tokens.access_token) {
       try {
-        const { data: response } = await apiAuth.updateProfile(currentState.tokens.access_token, payload)
-        if (response.value) {
-          dispatch(setUserProfile(response.value))
+        const res = await apiAuth.updateProfile(currentState.tokens.access_token, payload)
+        if (res) {
+          dispatch(setUserProfile(res))
           dispatch(addNotice({
             title: "Profile update",
             content: "Your settings have been updated.",
