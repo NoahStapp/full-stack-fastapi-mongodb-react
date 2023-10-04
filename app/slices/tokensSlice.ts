@@ -3,6 +3,7 @@ import { apiAuth } from "../api"
 import { tokenExpired, tokenParser } from "../utilities"
 import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { addNotice } from "./toastsSlice";
+import { RootState } from "../stores/store";
 
 interface TokensState {
     access_token: string,
@@ -122,7 +123,7 @@ export const refreshTokens = () =>
       }
 
 
-export const token = (state: TokensState) => state.access_token
-export const refresh = (state: TokensState) => state.refresh_token
+export const token = (state: RootState) => state.tokens.access_token
+export const refresh = (state: RootState) => state.tokens.refresh_token
 
 export default tokensSlice.reducer

@@ -68,13 +68,3 @@ export default function Notification() {
         </div>
     )
 }
-
- 
-
-// watch(() => toasts.first, async () => {
-//   if (toasts.first) {
-//     show.value = true
-//     await toasts.timeoutNotice(toasts.first) 
-//     show.value = false
-//   }
-// })
