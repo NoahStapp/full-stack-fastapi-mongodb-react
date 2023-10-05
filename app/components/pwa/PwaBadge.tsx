@@ -13,7 +13,7 @@
 //                 {pwa.update_available_short}
 //                 </h2>
 //             </button>
-//         </template>  
-        
+//         </template>
+
 //     )
 // }

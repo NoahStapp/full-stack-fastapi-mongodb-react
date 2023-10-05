@@ -15,13 +15,14 @@ The following is the baseline [recommended approach](https://github.com/OWASP/Ch
 - Account recovery must ensure that the starting point is a logged-out account.
 - Where a state is unclear, use two tokens (one emailed, one stored in the browser) with a handshaking / fingerprinting protocol to ensure a chain of custody.
 - An application should respond with a generic error message regardless of whether:
-	- The user ID or password was incorrect.
-	- The account does not exist.
-	- The account is locked or disabled.
+  - The user ID or password was incorrect.
+  - The account does not exist.
+  - The account is locked or disabled.
 - Code should go through the same process, no matter what, allowing the application to return in approximately the same response time.
 - In the words of [George Orwell](https://en.wikipedia.org/wiki/Politics_and_the_English_Language#Remedy_of_Six_Rules), "break any of these rules sooner than do anything outright barbarous".
 
 [On passwords](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Password_Storage_Cheat_Sheet.md):
+
 - Use `Argon2id` with a minimum configuration of 15 MiB of memory, an iteration count of 2, and 1 degree of parallelism.
 - Passwords shorter than 8 characters are considered to be weak (NIST SP800-63B).
 - Maximum password length of 64 prevents long password Denial of Service attacks.

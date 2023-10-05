@@ -2,8 +2,8 @@ import {
   IUserProfile,
   IUserProfileUpdate,
   IUserProfileCreate,
-  IUserOpenProfileCreate
-} from "./profile"
+  IUserOpenProfileCreate,
+} from "./profile";
 
 import {
   ITokenResponse,
@@ -12,14 +12,14 @@ import {
   IEnableTOTP,
   ISendEmail,
   IMsg,
-  INotification
-} from "./utilities"
+  INotification,
+} from "./utilities";
 
 // https://stackoverflow.com/a/64782482/295606
 interface IKeyable {
-  [key: string]: any | any[]
+  [key: string]: any | any[];
 }
-  
+
 export {
   IKeyable,
   IUserProfile,
@@ -32,5 +32,5 @@ export {
   IEnableTOTP,
   ISendEmail,
   IMsg,
-  INotification
-}
+  INotification,
+};
