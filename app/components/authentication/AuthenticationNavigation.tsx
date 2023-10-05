@@ -1,13 +1,14 @@
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import type { RootState } from "../../lib/store";
-import { Menu, Transition } from "@headlessui/react";
-import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { loggedIn, logOut } from "../../lib/slices/authSlice";
-import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import type { RootState } from "../../lib/store"
+import { Menu, Transition } from "@headlessui/react"
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
+import Link from "next/link"
+import Image from "next/image"
+import { loggedIn, logOut } from "../../lib/slices/authSlice"
+import { useRouter } from "next/router"
 
-const navigation = [{ name: "Settings", to: "/settings" }];
-const redirectRoute = "/";
+const navigation = [{ name: "Settings", to: "/settings" }]
+const redirectRoute = "/"
 
 const renderNavLinks = (active: boolean) => {
   return navigation.map((nav) => (
@@ -21,8 +22,8 @@ const renderNavLinks = (active: boolean) => {
     >
       {nav.name}
     </Link>
-  ));
-};
+  ))
+}
 
 const renderUser = (loggedIn: boolean) => {
   if (!loggedIn) {
@@ -35,32 +36,32 @@ const renderUser = (loggedIn: boolean) => {
           <ArrowLeftOnRectangleIcon className="block h-6 w-6" />
         </Link>
       </div>
-    );
+    )
   } else {
     return (
       <div>
         <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
           <span className="sr-only">Open user menu</span>
-          <img
+          <Image
             className="h-8 w-8 rounded-full"
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
             alt=""
           />
         </Menu.Button>
       </div>
-    );
+    )
   }
-};
+}
 
 export default function AuthenticationNavigation() {
-  const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state));
+  const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state))
+  const router = useRouter()
 
   const logout = () => {
-    const router = useRouter();
-    dispatch(logOut());
-    router.push(redirectRoute);
-  };
+    dispatch(logOut())
+    router.push(redirectRoute)
+  }
 
   return (
     <div>
@@ -96,5 +97,5 @@ export default function AuthenticationNavigation() {
         </Transition>
       </Menu>
     </div>
-  );
+  )
 }

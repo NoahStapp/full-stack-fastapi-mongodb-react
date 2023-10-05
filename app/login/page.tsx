@@ -1,41 +1,47 @@
-"use client";
+"use client"
 
-import { useAppDispatch, useAppSelector } from "../lib/hooks";
-import type { RootState } from "../lib/store";
-import { getUserProfile, loggedIn } from "../lib/slices/authSlice";
-import { getTokens } from "../lib/slices/tokensSlice";
-import { useRouter, useSearchParams } from "next/navigation";
-import { tokenIsTOTP, tokenParser } from "../lib/utilities";
-import { Switch } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../lib/hooks"
+import type { RootState } from "../lib/store"
+import { getUserProfile, loggedIn } from "../lib/slices/authSlice"
+import { getTokens } from "../lib/slices/tokensSlice"
+import { useRouter, useSearchParams } from "next/navigation"
+import { tokenIsTOTP, tokenParser } from "../lib/utilities"
+import { Switch } from "@headlessui/react"
+import { useEffect, useState } from "react"
 import {
   FieldErrors,
   FieldValues,
   UseFormRegister,
   useForm,
-} from "react-hook-form";
-import Link from "next/link";
+} from "react-hook-form"
+import Link from "next/link"
+import Image from "next/image"
 
 const schema = {
-    email: { required: true },
-    password: { required: true, minLength: 8, maxLength: 64 },
+  email: { required: true },
+  password: { required: true, minLength: 8, maxLength: 64 },
 }
 
 //@ts-ignore
 const renderError = (type: LiteralUnion<keyof RegisterOptions, string>) => {
-  const style = "absolute left-5 top-0 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
-  switch(type) {
+  const style =
+    "absolute left-5 top-0 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
+  switch (type) {
     case "required":
       return <div className={style}>This field is required.</div>
     case "minLength" || "maxLength":
-      return <div className={style}>Your password must be between 8 and 64 characters long.</div>
+      return (
+        <div className={style}>
+          Your password must be between 8 and 64 characters long.
+        </div>
+      )
     default:
       return <></>
   }
 }
-const redirectAfterLogin = "/";
-const redirectAfterMagic = "/magic";
-const redirectTOTP = "/totp";
+const redirectAfterLogin = "/"
+const redirectAfterMagic = "/magic"
+const redirectTOTP = "/totp"
 
 function PasswordBlock(
   register: UseFormRegister<FieldValues>,
@@ -71,9 +77,9 @@ function PasswordBlock(
           </Link>
         </div>
       </div>
-    );
+    )
   } else {
-    return;
+    return
   }
 }
 
@@ -83,7 +89,7 @@ function LoginMessage(oauth: boolean) {
       <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
         Login with password
       </h2>
-    );
+    )
   else
     return (
       <div>
@@ -94,52 +100,51 @@ function LoginMessage(oauth: boolean) {
           We'll check if you have an account, and create one if you don't.
         </p>
       </div>
-    );
+    )
 }
 
 export default function Page() {
-  const [oauth, setOauth] = useState(false);
-  const dispatch = useAppDispatch();
+  const [oauth, setOauth] = useState(false)
+  const dispatch = useAppDispatch()
   const accessToken = useAppSelector(
     (state: RootState) => state.tokens.access_token,
-  );
-  const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state));
+  )
+  const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state))
 
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = useSearchParams()
+  const router = useRouter()
 
   const redirectTo = (route: string) => {
-    router.push(route);
-  };
+    router.push(route)
+  }
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
   async function submit(data: FieldValues) {
     await dispatch(
       getTokens({ username: data["email"], password: data["password"] }),
-    );
-    await dispatch(getUserProfile(accessToken));
-    if (isLoggedIn) return redirectTo(redirectAfterLogin);
-    if (accessToken && tokenIsTOTP(accessToken))
-      return redirectTo(redirectTOTP);
+    )
+    await dispatch(getUserProfile(accessToken))
+    if (isLoggedIn) return redirectTo(redirectAfterLogin)
+    if (accessToken && tokenIsTOTP(accessToken)) return redirectTo(redirectTOTP)
     if (accessToken && tokenParser(accessToken).hasOwnProperty("fingerprint"))
-      return redirectTo(redirectAfterMagic);
+      return redirectTo(redirectAfterMagic)
   }
 
   useEffect(() => {
-    if (searchParams && searchParams.get("oauth")) setOauth(true);
-  });
+    if (searchParams && searchParams.get("oauth")) setOauth(true)
+  })
 
   return (
     <main className="flex min-h-full">
       <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img
+            <Image
               className="h-12 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=rose&shade=500"
               alt="Your Company"
@@ -221,12 +226,12 @@ export default function Page() {
         </div>
       </div>
       <div className="relative hidden w-0 flex-1 lg:block">
-        <img
+        <Image
           className="absolute inset-0 h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1561487138-99ccf59b135c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
           alt=""
         />
       </div>
     </main>
-  );
+  )
 }

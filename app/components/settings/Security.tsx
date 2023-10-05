@@ -1,39 +1,44 @@
-"use client";
+"use client"
 
-import { Switch, Dialog, Transition } from "@headlessui/react";
-import { QrCodeIcon } from "@heroicons/react/24/outline";
-import { apiAuth } from "../../lib/api";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { RootState } from "../../lib/store";
-import { IEnableTOTP, INewTOTP, IUserProfileUpdate } from "../../lib/interfaces";
+import { Switch, Dialog, Transition } from "@headlessui/react"
+import { QrCodeIcon } from "@heroicons/react/24/outline"
+import { apiAuth } from "../../lib/api"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import { useForm } from "react-hook-form"
+import { useEffect, useState } from "react"
+import { RootState } from "../../lib/store"
+import { IEnableTOTP, INewTOTP, IUserProfileUpdate } from "../../lib/interfaces"
 import {
   disableTOTPAuthentication,
   enableTOTPAuthentication,
   profile,
   updateUserProfile,
-} from "../../lib/slices/authSlice";
-import { refreshTokens, token } from "../../lib/slices/tokensSlice";
+} from "../../lib/slices/authSlice"
+import { refreshTokens, token } from "../../lib/slices/tokensSlice"
 
-const title = "Security";
-const redirectTOTP = "/settings";
-const qrSize = 200;
+const title = "Security"
+const redirectTOTP = "/settings"
+const qrSize = 200
 
 const resetProfile = () => {
   return {
     password: "",
-  };
-};
+  }
+}
 
 //@ts-ignore
 const renderError = (type: LiteralUnion<keyof RegisterOptions, string>) => {
-  const style = "absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
-  switch(type) {
+  const style =
+    "absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
+  switch (type) {
     case "required":
       return <div className={style}>This field is required.</div>
     case "minLength" || "maxLength":
-      return <div className={style}>Your password must be between 8 and 64 characters long.</div>
+      return (
+        <div className={style}>
+          Your password must be between 8 and 64 characters long.
+        </div>
+      )
     case "match":
       return <div className={style}>Your passwords do not match.</div>
     default:
@@ -42,76 +47,80 @@ const renderError = (type: LiteralUnion<keyof RegisterOptions, string>) => {
 }
 
 export default function Security() {
-  const [updatedProfile, setProfile] = useState({} as IUserProfileUpdate);
-  const [totpEnabled, changeTotpEnabled] = useState(false);
-  const [totpModal, changeTotpModal] = useState(false);
-  const [totpNew, changeTotpNew] = useState({} as INewTOTP);
-  const [totpClaim, changeTotpClaim] = useState({} as IEnableTOTP);
+  const [updatedProfile, setProfile] = useState({} as IUserProfileUpdate)
+  const [totpEnabled, changeTotpEnabled] = useState(false)
+  const [totpModal, changeTotpModal] = useState(false)
+  const [totpNew, changeTotpNew] = useState({} as INewTOTP)
+  const [totpClaim, changeTotpClaim] = useState({} as IEnableTOTP)
 
-  const dispatch = useAppDispatch();
-  const currentProfile = useAppSelector((state: RootState) => profile(state));
-  const accessToken = useAppSelector((state: RootState) => token(state));
+  const dispatch = useAppDispatch()
+  const currentProfile = useAppSelector((state: RootState) => profile(state))
+  const accessToken = useAppSelector((state: RootState) => token(state))
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
   const {
     register: registerTotp,
     handleSubmit: handleSubmitTotp,
     formState: { errors: errorsTotp },
-  } = useForm();
+  } = useForm()
 
   const schema = {
-    original: { required: currentProfile.password, minLength: 8, maxLength: 64 },
+    original: {
+      required: currentProfile.password,
+      minLength: 8,
+      maxLength: 64,
+    },
     password: { required: false, minLength: 8, maxLength: 64 },
-    confirmation: { required: false }
+    confirmation: { required: false },
   }
-  
+
   const totpSchema = {
-    claim: { required: true, minLength: 6, maxLength: 7 }
+    claim: { required: true, minLength: 6, maxLength: 7 },
   }
 
   useEffect(() => {
-    setProfile(resetProfile());
-    changeTotpEnabled(currentProfile.totp);
-  }, []);
+    setProfile(resetProfile())
+    changeTotpEnabled(currentProfile.totp)
+  }, [])
 
   // @ts-ignore
   async function enableTOTP(values: any) {
-    totpClaim.claim = values.claim;
-    await dispatch(enableTOTPAuthentication(totpClaim));
-    changeTotpModal(false);
+    totpClaim.claim = values.claim
+    await dispatch(enableTOTPAuthentication(totpClaim))
+    changeTotpModal(false)
   }
 
   // @ts-ignore
   async function submit(values: any) {
-    let newProfile = {} as IUserProfileUpdate;
+    let newProfile = {} as IUserProfileUpdate
     if (
       (!currentProfile.password && !values.original) ||
       (currentProfile.password && values.original)
     ) {
-      if (values.original) newProfile.original = values.original;
+      if (values.original) newProfile.original = values.original
       if (values.password && values.password !== values.original) {
-        newProfile.password = values.password;
-        await dispatch(updateUserProfile(newProfile));
+        newProfile.password = values.password
+        await dispatch(updateUserProfile(newProfile))
       }
       if (totpEnabled !== currentProfile.totp && totpEnabled) {
-        await dispatch(refreshTokens());
-        const res = await apiAuth.requestNewTOTP(accessToken);
+        await dispatch(refreshTokens())
+        const res = await apiAuth.requestNewTOTP(accessToken)
         if (res) {
-          totpNew.key = res.key;
-          totpNew.uri = res.uri;
-          totpClaim.uri = res.uri;
-          totpClaim.password = values.original;
-          changeTotpModal(true);
+          totpNew.key = res.key
+          totpNew.uri = res.uri
+          totpClaim.uri = res.uri
+          totpClaim.password = values.original
+          changeTotpModal(true)
         }
       }
       if (totpEnabled !== currentProfile.totp && !totpEnabled) {
-        await dispatch(disableTOTPAuthentication(newProfile));
+        await dispatch(disableTOTPAuthentication(newProfile))
       }
       // resetForm()
     }
@@ -223,8 +232,8 @@ export default function Security() {
                 {...register("confirmation", {
                   ...schema.confirmation,
                   validate: {
-                    match: val => watch('password') == val
-                  }
+                    match: (val) => watch("password") == val,
+                  },
                 })}
                 id="confirmation"
                 name="confirmation"
@@ -336,14 +345,18 @@ export default function Security() {
                                   </label>
                                   <div className="mt-1 group relative inline-block w-full">
                                     <input
-                                      {...registerTotp("claim", totpSchema.claim)}
+                                      {...registerTotp(
+                                        "claim",
+                                        totpSchema.claim,
+                                      )}
                                       id="claim"
                                       name="claim"
                                       type="text"
                                       autoComplete="off"
                                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm"
                                     />
-                                    {errorsTotp.claim && renderError(errorsTotp.claim.type)}
+                                    {errorsTotp.claim &&
+                                      renderError(errorsTotp.claim.type)}
                                   </div>
                                 </div>
                                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
@@ -376,5 +389,5 @@ export default function Security() {
         </Dialog>
       </Transition>
     </div>
-  );
+  )
 }

@@ -1,35 +1,36 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useAppDispatch } from "../lib/hooks";
-import { useForm } from "react-hook-form";
-import { recoverPassword } from "../lib/slices/authSlice";
-import { useRouter } from "next/navigation";
+import Link from "next/link"
+import { useAppDispatch } from "../lib/hooks"
+import { useForm } from "react-hook-form"
+import { recoverPassword } from "../lib/slices/authSlice"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
 
-const redirectRoute = "/";
+const redirectRoute = "/"
 const schema = {
   email: { required: true },
-};
+}
 
 export default function RecoverPassword() {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
   async function submit(values: any) {
-    await dispatch(recoverPassword(values.email));
+    await dispatch(recoverPassword(values.email))
     await new Promise((resolve) => {
       setTimeout(() => {
-        resolve(true);
-      }, 2000);
-    });
-    router.push(redirectRoute);
+        resolve(true)
+      }, 2000)
+    })
+    router.push(redirectRoute)
   }
 
   return (
@@ -37,7 +38,7 @@ export default function RecoverPassword() {
       <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img
+            <Image
               className="h-12 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=rose&shade=500"
               alt="Your Company"
@@ -73,7 +74,9 @@ export default function RecoverPassword() {
                       <div
                         id="email"
                         className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
-                      >This field is required.</div>
+                      >
+                        This field is required.
+                      </div>
                     )}
                   </div>
                   <div className="text-sm text-right">
@@ -98,7 +101,7 @@ export default function RecoverPassword() {
           </div>
         </div>
         <div className="relative hidden w-0 flex-1 lg:block">
-          <img
+          <Image
             className="absolute inset-0 h-full w-full object-cover"
             src="https://images.unsplash.com/photo-1561487138-99ccf59b135c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
             alt=""
@@ -106,5 +109,5 @@ export default function RecoverPassword() {
         </div>
       </div>
     </main>
-  );
+  )
 }

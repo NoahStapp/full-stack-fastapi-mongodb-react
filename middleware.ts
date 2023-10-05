@@ -1,29 +1,29 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getUserProfile, isAdmin, loggedIn } from "./app/lib/slices/authSlice";
-import { store } from "./app/lib/store";
-import { refreshTokens } from "./app/lib/slices/tokensSlice";
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+import { getUserProfile, isAdmin, loggedIn } from "./app/lib/slices/authSlice"
+import { store } from "./app/lib/store"
+import { refreshTokens } from "./app/lib/slices/tokensSlice"
 
 const redirectRoutes = [
   "/login",
   "/join",
   "/recover-password",
   "/reset-password",
-];
+]
 const anonymousRoutes = [
   "/login",
   "/recover-password",
   "/reset-password",
   "/magic",
   "/totp",
-];
-const authenticatedRoutes = ["/settings"];
-const adminRoutes = ["/moderation"];
-const refreshRoutes = ["/"];
+]
+const authenticatedRoutes = ["/settings"]
+const adminRoutes = ["/moderation"]
+const refreshRoutes = ["/"]
 
 async function refresh() {
-  await store.dispatch(refreshTokens());
-  await store.dispatch(getUserProfile(store.getState().tokens.access_token));
+  await store.dispatch(refreshTokens())
+  await store.dispatch(getUserProfile(store.getState().tokens.access_token))
 }
 
 export function middleware(request: NextRequest) {

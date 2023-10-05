@@ -1,12 +1,12 @@
-import { AtSymbolIcon } from "@heroicons/react/24/outline";
-import { useAppDispatch } from "../../lib/hooks";
-import { sendEmailValidation } from "../../lib/slices/authSlice";
+import { AtSymbolIcon } from "@heroicons/react/24/outline"
+import { useAppDispatch } from "../../lib/hooks"
+import { sendEmailValidation } from "../../lib/slices/authSlice"
 
 export default function ValidateEmailButton() {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   async function submit() {
-    await dispatch(sendEmailValidation());
+    await dispatch(sendEmailValidation())
   }
 
   return (
@@ -21,5 +21,5 @@ export default function ValidateEmailButton() {
       />
       <span className="truncate">Validate email</span>
     </button>
-  );
+  )
 }

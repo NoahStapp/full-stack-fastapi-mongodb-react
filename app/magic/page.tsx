@@ -1,28 +1,29 @@
-"use client";
+"use client"
 
-import { LinkIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
-import { tokenParser } from "../lib/utilities";
-import { token } from "../lib/slices/tokensSlice";
-import { useEffect } from "react";
-import { useAppSelector } from "../lib/hooks";
-import Link from "next/link";
-import { RootState } from "../lib/store";
-import { useRouter } from "next/navigation";
+import { LinkIcon, EnvelopeIcon } from "@heroicons/react/24/outline"
+import { tokenParser } from "../lib/utilities"
+import { token } from "../lib/slices/tokensSlice"
+import { useEffect } from "react"
+import { useAppSelector } from "../lib/hooks"
+import Link from "next/link"
+import { RootState } from "../lib/store"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
 
-const redirectRoute = "/login";
+const redirectRoute = "/login"
 
 export default function Magic() {
-  const router = useRouter();
-  const accessToken = useAppSelector((state: RootState) => token(state));
+  const router = useRouter()
+  const accessToken = useAppSelector((state: RootState) => token(state))
 
   useEffect(() => {
     if (
       accessToken &&
       !tokenParser(accessToken).hasOwnProperty("fingerprint")
     ) {
-      router.push(redirectRoute);
+      router.push(redirectRoute)
     }
-  });
+  })
 
   return (
     <main className="flex min-h-full">
@@ -58,12 +59,12 @@ export default function Magic() {
         </div>
       </div>
       <div className="relative hidden w-0 flex-1 lg:block">
-        <img
+        <Image
           className="absolute inset-0 h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1561487138-99ccf59b135c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
           alt=""
         />
       </div>
     </main>
-  );
+  )
 }

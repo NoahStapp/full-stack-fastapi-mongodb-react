@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 // const config: Config = {
 //   content: [
@@ -20,7 +20,7 @@ import type { Config } from "tailwindcss";
 // export default config
 
 /** @type {import("tailwindcss").Config} */
-const colors = require("tailwindcss/colors");
+const colors = require("tailwindcss/colors")
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -44,4 +44,4 @@ module.exports = {
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
   ],
-};
+}

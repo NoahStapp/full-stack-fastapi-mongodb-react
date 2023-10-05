@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Image from "next/image"
+import Link from "next/link"
 
 export default function Page() {
   return (
@@ -28,11 +29,11 @@ export default function Page() {
               </div>
               <div className="mt-6 sm:max-w-xl">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                  FastAPI/Nuxt starter stack
+                  FastAPI/React starter stack
                 </h1>
                 <p className="mt-6 text-xl text-gray-500">
                   Accelerate your next web development project with this FastAPI
-                  0.88 / Nuxt.js 3.0 base project generator.
+                  0.88 / React 18.0 base project generator.
                 </p>
               </div>
               <div className="mt-6 sm:max-w-xl">
@@ -54,11 +55,13 @@ export default function Page() {
                   </li>
                   <li>
                     <span className="font-bold">Form validation</span> with
-                    Vee-Validate 4.
+                    react-hook-form.
                   </li>
                   <li>
-                    <span className="font-bold">State management</span> with
-                    Pinia, and persistance with Pinia PersistedState.
+                    <span className="font-bold">
+                      State management and persistance
+                    </span>{" "}
+                    with Redux.
                   </li>
                   <li>
                     <span className="font-bold">CSS and templates</span> with
@@ -66,7 +69,7 @@ export default function Page() {
                   </li>
                   <li>
                     <span className="font-bold">Content management</span> with
-                    Nuxt Content for writing Markdown pages.
+                    Next.js for writing Markdown pages.
                   </li>
                 </ul>
               </div>
@@ -112,7 +115,7 @@ export default function Page() {
               </svg>
             </div>
             <div className="relative -mr-40 pl-4 sm:mx-auto sm:max-w-3xl sm:px-0 lg:h-full lg:max-w-none lg:pl-12">
-              <img
+              <Image
                 className="w-full rounded-md shadow-xl ring-1 ring-black ring-opacity-5 lg:h-full lg:w-auto lg:max-w-none"
                 src="https://images.unsplash.com/photo-1465661668481-15b9405ca28e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&flip=h&w=1074&q=80"
                 alt=""
@@ -122,5 +125,5 @@ export default function Page() {
         </div>
       </div>
     </main>
-  );
+  )
 }

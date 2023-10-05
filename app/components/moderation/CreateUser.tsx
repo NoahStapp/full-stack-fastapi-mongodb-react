@@ -1,31 +1,28 @@
-import { apiAuth } from "../../lib/api";
-import { generateUUID } from "../../lib/utilities";
-import { IUserProfileCreate } from "../../lib/interfaces";
-import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { refreshTokens, token } from "../../lib/slices/tokensSlice";
-import { RootState } from "../../lib/store";
-import { addNotice } from "../../lib/slices/toastsSlice";
+import { apiAuth } from "../../lib/api"
+import { generateUUID } from "../../lib/utilities"
+import { IUserProfileCreate } from "../../lib/interfaces"
+import { useForm } from "react-hook-form"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import { refreshTokens, token } from "../../lib/slices/tokensSlice"
+import { RootState } from "../../lib/store"
+import { addNotice } from "../../lib/slices/toastsSlice"
 
 export default function CreateUser() {
-  const dispatch = useAppDispatch();
-  const accessToken = useAppSelector((state: RootState) => token(state));
+  const dispatch = useAppDispatch()
+  const accessToken = useAppSelector((state: RootState) => token(state))
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm();
+  const { register, handleSubmit } = useForm()
 
   // @ts-ignore
   async function submit(values: any) {
     if (values.email) {
-      await dispatch(refreshTokens());
+      await dispatch(refreshTokens())
       const data: IUserProfileCreate = {
         email: values.email,
         password: generateUUID(),
         fullName: values.fullName ? values.fullName : "",
-      };
-      const res = await apiAuth.createUserProfile(accessToken, data);
+      }
+      const res = await apiAuth.createUserProfile(accessToken, data)
       if (!res) {
         dispatch(
           addNotice({
@@ -33,7 +30,7 @@ export default function CreateUser() {
             content: "Invalid request.",
             icon: "error",
           }),
-        );
+        )
       } else {
         dispatch(
           addNotice({
@@ -41,7 +38,7 @@ export default function CreateUser() {
             content:
               "An email has been sent to the user with their new login details.",
           }),
-        );
+        )
       }
     }
   }
@@ -97,5 +94,5 @@ export default function CreateUser() {
         </div>
       </form>
     </div>
-  );
+  )
 }

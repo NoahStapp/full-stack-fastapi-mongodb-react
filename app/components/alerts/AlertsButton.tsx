@@ -1,4 +1,4 @@
-import { BellIcon } from "@heroicons/react/24/outline";
+import { BellIcon } from "@heroicons/react/24/outline"
 
 export default function AlertsButton() {
   return (
@@ -11,5 +11,5 @@ export default function AlertsButton() {
         <BellIcon className="h-6 w-6" aria-hidden="true" />
       </button>
     </div>
-  );
+  )
 }

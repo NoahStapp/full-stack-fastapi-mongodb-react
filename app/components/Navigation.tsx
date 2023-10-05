@@ -1,32 +1,33 @@
-"use client";
+"use client"
 
-import { Disclosure } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import AlertsButton from "./alerts/AlertsButton";
-import AuthenticationNavigation from "./authentication/AuthenticationNavigation";
+import { Disclosure } from "@headlessui/react"
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
+import Link from "next/link"
+import Image from "next/image"
+import AlertsButton from "./alerts/AlertsButton"
+import AuthenticationNavigation from "./authentication/AuthenticationNavigation"
 
 const navigation = [
   { name: "About", to: "/about" },
   { name: "Authentication", to: "/authentication" },
   { name: "Blog", to: "/blog" },
-];
+]
 
 const renderIcon = (open: boolean) => {
   if (!open) {
-    return <Bars3Icon className="block h-6 w-6" aria-hidden="true" />;
+    return <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
   } else {
-    return <XMarkIcon className="block h-6 w-6" aria-hidden="true" />;
+    return <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
   }
-};
+}
 
 const renderNavLinks = (style: string) => {
   return navigation.map((nav) => (
     <Link href={nav.to} key={nav.name} className={style}>
       {nav.name}
     </Link>
-  ));
-};
+  ))
+}
 export default function Navigation() {
   return (
     <header>
@@ -45,12 +46,12 @@ export default function Navigation() {
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
                     <Link href="/" className="flex flex-shrink-0 items-center">
-                      <img
+                      <Image
                         className="block h-8 w-auto lg:hidden"
                         src="https://tailwindui.com/img/logos/mark.svg?color=rose&shade=600"
                         alt="Your Company"
                       />
-                      <img
+                      <Image
                         className="hidden h-8 w-auto lg:block"
                         src="https://tailwindui.com/img/logos/mark.svg?color=rose&shade=600"
                         alt="Your Company"
@@ -82,5 +83,5 @@ export default function Navigation() {
         )}
       </Disclosure>
     </header>
-  );
+  )
 }

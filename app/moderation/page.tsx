@@ -1,30 +1,30 @@
-"use client";
+"use client"
 
 import {
   Cog8ToothIcon,
   UsersIcon,
   UserPlusIcon,
-} from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import UserTable from "../components/moderation/UserTable";
-import CreateUser from "../components/moderation/CreateUser";
+} from "@heroicons/react/24/outline"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import UserTable from "../components/moderation/UserTable"
+import CreateUser from "../components/moderation/CreateUser"
 
 const navigation = [
   { name: "Users", id: "USERS", icon: UsersIcon },
   { name: "Create", id: "CREATE", icon: UserPlusIcon },
-];
-const title = "User moderation";
-const description = "Create, delete and update individual user settings.";
+]
+const title = "User moderation"
+const description = "Create, delete and update individual user settings."
 
 export default function Moderation() {
-  const [selected, changeSelection] = useState("USERS");
+  const [selected, changeSelection] = useState("USERS")
 
-  const router = useRouter();
+  const router = useRouter()
 
   const redirectTo = (route: string) => {
-    router.push(route);
-  };
+    router.push(route)
+  }
 
   const renderNavigation = () => {
     return navigation.map((item) => (
@@ -49,8 +49,8 @@ export default function Moderation() {
         />
         <span className="truncate">{item.name}</span>
       </button>
-    ));
-  };
+    ))
+  }
 
   return (
     <main className="flex min-h-full mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -81,5 +81,5 @@ export default function Moderation() {
         </div>
       </div>
     </main>
-  );
+  )
 }
