@@ -71,8 +71,8 @@ export const getUserProfile = (token: string) =>
     async (dispatch: Dispatch) => {
       if (token && !tokenIsTOTP(token)) {
         try {
-          const { data: response } = await apiAuth.getProfile(token)
-          if (response.value) dispatch(setUserProfile(response.value))
+          const res = await apiAuth.getProfile(token)
+          if (res) dispatch(setUserProfile(res))
         } catch (error) {
           dispatch(addNotice({
             title: "Login error",
@@ -87,8 +87,8 @@ export const getUserProfile = (token: string) =>
 export const createUserProfile = (payload: IUserOpenProfileCreate) => 
   async (dispatch: Dispatch) => {
     try {
-      const { data: response } = await apiAuth.createProfile(payload)
-      if (response.value) dispatch(setUserProfile(response.value))
+      const res = await apiAuth.createProfile(payload)
+      if (res) dispatch(setUserProfile(res))
     } catch (error) {
       dispatch(addNotice({
         title: "Login creation error",
@@ -126,12 +126,12 @@ export const enableTOTPAuthentication = (payload: IEnableTOTP) =>
     const currentState = getState()
     if (loggedIn(currentState) && currentState.tokens.access_token) {
       try {
-        const { data: response } = await apiAuth.enableTOTPAuthentication(currentState.tokens.access_token, payload)
-        if (response.value) {
+        const res = await apiAuth.enableTOTPAuthentication(currentState.tokens.access_token, payload)
+        if (res) {
           dispatch(setTOTPAuthentication(true))
           dispatch(addNotice({
             title: "Two-factor authentication",
-            content: response.value.msg,
+            content: res.msg,
           }))
         } else throw "Error"
       } catch (error) {
@@ -149,12 +149,12 @@ export const disableTOTPAuthentication = (payload: IUserProfileUpdate) =>
     const currentState = getState()
     if (loggedIn(currentState) && currentState.tokens.access_token) {
       try {
-        const { data: response } = await apiAuth.disableTOTPAuthentication(currentState.tokens.access_token, payload)
-        if (response.value) {
+        const res = await apiAuth.disableTOTPAuthentication(currentState.tokens.access_token, payload)
+        if (res) {
           dispatch(setTOTPAuthentication(false))
           dispatch(addNotice({
             title: "Two-factor authentication",
-            content: response.value.msg,
+            content: res.msg,
           }))
         } else throw "Error"
       } catch (error) {
@@ -194,15 +194,15 @@ export const validateEmail = (validationToken: string) =>
     const currentState = getState()
     if (currentState.tokens.access_token && !currentState.auth.email_validated) {
       try {
-        const { data: response } = await apiAuth.validateEmail(
+        const res = await apiAuth.validateEmail(
           currentState.tokens.access_token,
           validationToken
         )
-        if (response.value) {
+        if (res) {
           dispatch(setEmailValidation(true))
           dispatch(addNotice({
             title: "Success",
-            content: response.value.msg,
+            content: res.msg,
       }))
         } else throw "Error"
       } catch (error) {
@@ -220,10 +220,10 @@ export const recoverPassword = (email: string) =>
     const currentState = getState()
     if (!loggedIn(currentState)) {
       try {
-        const { data: response } = await apiAuth.recoverPassword(email)
-        if (response.value) {
-          if (response.value.hasOwnProperty("claim")) 
-            dispatch(setMagicToken(response.value as unknown as IWebToken))
+        const res = await apiAuth.recoverPassword(email)
+        if (res) {
+          if (res.hasOwnProperty("claim")) 
+            dispatch(setMagicToken(res as unknown as IWebToken))
             dispatch(addNotice({
             title: "Success",
             content: "If that login exists, we'll send you an email to reset your password.",
@@ -252,10 +252,10 @@ export const resetPassword = (password: string, token: string) =>
         if (localClaim.hasOwnProperty("fingerprint") 
             && magicClaim.hasOwnProperty("fingerprint")
             && localClaim["fingerprint"] === magicClaim["fingerprint"]) {
-          const { data: response } = await apiAuth.resetPassword(password, claim, token)
-          if (response.value) dispatch(addNotice({
+          const res = await apiAuth.resetPassword(password, claim, token)
+          if (res) dispatch(addNotice({
             title: "Success",
-            content: response.value.msg,
+            content: res.msg,
           }))
           else throw "Error"
         }
