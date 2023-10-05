@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { store } from "./lib/store";
+import { store } from "./store";
 import { Provider } from "react-redux";
 
 export const ReduxProvider = (props: React.PropsWithChildren) => {
