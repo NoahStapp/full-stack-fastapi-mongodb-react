@@ -39,11 +39,11 @@ export default function Magic() {
             </h2>
             <p className="text-sm font-medium text-rose-500 hover:text-rose-600 mt-6">
               We sent you an email with a magic link. Once you click that (or
-              copy it into this browser) you'll be signed in.
+              copy it into this browser) you&apos;ll be signed in.
             </p>
             <p className="text-sm font-medium text-rose-500 hover:text-rose-600 mt-2">
               Make sure you use the same browser you requested the login from or
-              it won't work.
+              it won&apos;t work.
             </p>
           </div>
 
@@ -53,7 +53,7 @@ export default function Magic() {
               aria-hidden="true"
             />
             <p className="text-sm text-rose-500 align-middle">
-              If you prefer, use your password & don't email.
+              If you prefer, use your password & don&apos;t email.
             </p>
           </Link>
         </div>

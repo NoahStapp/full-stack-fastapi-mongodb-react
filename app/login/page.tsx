@@ -97,7 +97,8 @@ function LoginMessage(oauth: boolean) {
           Login with email
         </h2>
         <p className="text-sm font-medium text-rose-500 hover:text-rose-600 mt-6">
-          We'll check if you have an account, and create one if you don't.
+          We&apos;ll check if you have an account, and create one if you
+          don&apos;t.
         </p>
       </div>
     )
@@ -137,7 +138,7 @@ export default function Page() {
 
   useEffect(() => {
     if (searchParams && searchParams.get("oauth")) setOauth(true)
-  })
+  }, [searchParams])
 
   return (
     <main className="flex min-h-full">
@@ -195,7 +196,7 @@ export default function Page() {
 
           <div className="mt-8 flex items-center justify-between">
             <p className="text-sm text-rose-500 align-middle">
-              If you prefer, use your password & don't email.
+              If you prefer, use your password & don&apos;t email.
             </p>
             <Switch
               checked={oauth}

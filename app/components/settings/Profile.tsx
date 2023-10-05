@@ -60,7 +60,7 @@ export default function Profile() {
 
   useEffect(() => {
     resetProfile()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function submit(values: any) {
     let newProfile = {} as IUserProfileUpdate
