@@ -1,5 +1,5 @@
-import { getPostData } from '../../utilities/posts'
-import { readableDate } from '../../utilities/textual'
+import { getPostData } from '../../lib/utilities/posts'
+import { readableDate } from '../../lib/utilities/textual'
 
 type Params = {
   id: string

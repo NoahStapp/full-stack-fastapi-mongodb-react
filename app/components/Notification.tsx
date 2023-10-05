@@ -3,9 +3,9 @@
 import { CheckCircleIcon, ExclamationCircleIcon, InformationCircleIcon } from "@heroicons/react/24/outline"
 import { XMarkIcon } from "@heroicons/react/20/solid"
 import { useEffect, useState } from "react";
-import { first, removeNotice, timeoutNotice } from '../slices/toastsSlice'
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { RootState } from "../stores/store";
+import { first, removeNotice, timeoutNotice } from '../lib/slices/toastsSlice'
+import { useAppDispatch, useAppSelector } from "../lib/hooks";
+import { RootState } from "../lib/store";
 
 const renderIcon = (iconName?: string) => {
     if (iconName === 'success') {

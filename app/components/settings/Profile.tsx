@@ -1,11 +1,11 @@
 'use client'
 
 import { IUserProfileUpdate } from "../../interfaces"
-import { useAppDispatch, useAppSelector } from "../../hooks"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
 import { useForm } from "react-hook-form"
-import { profile, updateUserProfile } from "../../slices/authSlice"
+import { profile, updateUserProfile } from "../../lib/slices/authSlice"
 import { useEffect, useState } from "react"
-import { RootState } from "../../stores/store"
+import { RootState } from "../../lib/store"
 
 const title = "Personal settings"
 const description = "Changing your email address will change your login. Any changes will require you to enter your original password."

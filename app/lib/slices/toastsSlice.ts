@@ -1,7 +1,7 @@
 import { Dispatch, PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { INotification } from "@/interfaces"
 import { generateUUID } from "../utilities"
-import { RootState } from '../stores/store';
+import { RootState } from '../store';
 
 interface ToastsState {
     notifications: INotification[]

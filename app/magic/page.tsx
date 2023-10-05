@@ -1,12 +1,12 @@
 'use client'
 
 import { LinkIcon, EnvelopeIcon } from "@heroicons/react/24/outline"
-import { tokenParser } from "../utilities"
-import { token } from "../slices/tokensSlice";
+import { tokenParser } from "../lib/utilities"
+import { token } from "../lib/slices/tokensSlice";
 import { useEffect } from "react";
-import { useAppSelector } from "../hooks";
+import { useAppSelector } from "../lib/hooks";
 import Link from "next/link"
-import { RootState } from "../stores/store";
+import { RootState } from "../lib/store";
 import { useRouter } from "next/navigation";
 
 const redirectRoute = "/login"

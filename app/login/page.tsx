@@ -1,11 +1,11 @@
 'use client'
 
-import { useAppDispatch, useAppSelector } from '../hooks'
-import type { RootState } from '../stores/store'
-import { getUserProfile, loggedIn } from '../slices/authSlice'
-import { getTokens } from '../slices/tokensSlice'
+import { useAppDispatch, useAppSelector } from '../lib/hooks'
+import type { RootState } from '../lib/store'
+import { getUserProfile, loggedIn } from '../lib/slices/authSlice'
+import { getTokens } from '../lib/slices/tokensSlice'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { tokenIsTOTP, tokenParser } from '../utilities'
+import { tokenIsTOTP, tokenParser } from '../lib/utilities'
 import { Switch } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 import { FieldErrors, FieldValues, UseFormRegister, useForm } from 'react-hook-form';

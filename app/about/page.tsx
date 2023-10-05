@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { getPostData } from '../utilities/posts'
+import { getPostData } from '../lib/utilities/posts'
 
 type Post = {
     id: string

@@ -1,13 +1,13 @@
 
-import { apiAuth } from "../../api"
+import { apiAuth } from "../../lib/api"
 import { IUserProfile } from "../../interfaces"
 import CheckState from "./CheckState"
 import ToggleActive from "./ToggleActive"
 import ToggleMod from "./ToggleMod"
-import { useAppDispatch, useAppSelector } from "../../hooks"
-import { RootState } from "../../stores/store"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import { RootState } from "../../lib/store"
 import { useEffect, useState } from "react"
-import { refreshTokens, token } from "../../slices/tokensSlice"
+import { refreshTokens, token } from "../../lib/slices/tokensSlice"
 
 const renderUserProfiles = (userProfiles: IUserProfile[]) => {
   return userProfiles.map(profile => 

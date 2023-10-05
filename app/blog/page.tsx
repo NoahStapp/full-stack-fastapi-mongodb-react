@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { getSortedPostsData } from '../utilities/posts'
-import { readableDate } from '../utilities/textual'
+import { getSortedPostsData } from '../lib/utilities/posts'
+import { readableDate } from '../lib/utilities/textual'
 
 type PostMeta = {
   id: string

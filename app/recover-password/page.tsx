@@ -1,9 +1,9 @@
 'use client'
 
 import Link from "next/link";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch } from "../lib/hooks";
 import { useForm } from "react-hook-form";
-import { recoverPassword } from "../slices/authSlice";
+import { recoverPassword } from "../lib/slices/authSlice";
 import { useRouter } from "next/navigation";
 
 const redirectRoute = "/"

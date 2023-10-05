@@ -1,12 +1,12 @@
 
-import { apiAuth } from "../../api"
+import { apiAuth } from "../../lib/api"
 import { IUserProfileUpdate } from "../../interfaces"
 import CheckToggle from "./CheckToggle"
-import { useAppDispatch, useAppSelector } from "../../hooks"
-import { RootState } from "../../stores/store"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import { RootState } from "../../lib/store"
 import { useState } from "react"
-import { refreshTokens, token } from "../../slices/tokensSlice"
-import { addNotice } from "../../slices/toastsSlice"
+import { refreshTokens, token } from "../../lib/slices/tokensSlice"
+import { addNotice } from "../../lib/slices/toastsSlice"
 
 interface ToggleModProps {
     email: string

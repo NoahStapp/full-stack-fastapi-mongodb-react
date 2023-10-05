@@ -1,12 +1,12 @@
 
-import { apiAuth } from "../../api"
-import { generateUUID } from "../../utilities"
+import { apiAuth } from "../../lib/api"
+import { generateUUID } from "../../lib/utilities"
 import { IUserProfileCreate } from "../../interfaces"
 import { useForm } from "react-hook-form"
-import { useAppDispatch, useAppSelector } from "../../hooks"
-import { refreshTokens, token } from "../../slices/tokensSlice"
-import { RootState } from "../../stores/store"
-import { addNotice } from "../../slices/toastsSlice"
+import { useAppDispatch, useAppSelector } from "../../lib/hooks"
+import { refreshTokens, token } from "../../lib/slices/tokensSlice"
+import { RootState } from "../../lib/store"
+import { addNotice } from "../../lib/slices/toastsSlice"
 
 const schema = {
     full_name: { required: false },

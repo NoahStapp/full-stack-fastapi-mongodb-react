@@ -6,9 +6,9 @@ import Profile from "../components/settings/Profile"
 import Security from "../components/settings/Security"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAppSelector } from "../hooks"
-import { RootState } from "../stores/store"
-import { profile } from "../slices/authSlice"
+import { useAppSelector } from "../lib/hooks"
+import { RootState } from "../lib/store"
+import { profile } from "../lib/slices/authSlice"
 
 const navigation = [
   { name: "Account", id: "ACCOUNT", icon: UserCircleIcon },
@@ -22,7 +22,6 @@ export default function Settings() {
   const currentProfile = useAppSelector((state: RootState) => profile(state))  
 
   const router = useRouter()
-
 
   const renderNavigation = () => {
     return navigation.map(item =>

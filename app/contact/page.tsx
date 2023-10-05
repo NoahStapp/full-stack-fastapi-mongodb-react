@@ -3,10 +3,10 @@
 import Link from "next/link"
 import { BuildingOffice2Icon, EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline"
 import { ISendEmail } from "../interfaces"
-import { apiService } from "../api"
-import { useAppDispatch } from "../hooks"
+import { apiService } from "../lib/api"
+import { useAppDispatch } from "../lib/hooks"
 import { useForm } from "react-hook-form"
-import { addNotice } from "../slices/toastsSlice"
+import { addNotice } from "../lib/slices/toastsSlice"
 import { useRouter } from "next/navigation"
 
 const schema = {

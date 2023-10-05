@@ -1,6 +1,6 @@
 import { Dispatch, PayloadAction, createSlice, current } from '@reduxjs/toolkit'
-import { IEnableTOTP, IUserOpenProfileCreate, IUserProfile, IUserProfileUpdate, IWebToken } from '../interfaces';
-import { RootState } from '../stores/store';
+import { IEnableTOTP, IUserOpenProfileCreate, IUserProfile, IUserProfileUpdate, IWebToken } from '../../interfaces';
+import { RootState } from '../store';
 import { tokenIsTOTP, tokenParser } from "../utilities"
 import { addNotice } from './toastsSlice';
 import { apiAuth } from '../api';

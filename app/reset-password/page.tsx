@@ -1,9 +1,9 @@
 'use client'
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useAppDispatch } from "../hooks"
+import { useAppDispatch } from "../lib/hooks"
 import { useForm } from "react-hook-form"
-import { resetPassword } from "../slices/authSlice"
+import { resetPassword } from "../lib/slices/authSlice"
 import { useEffect } from "react"
 
 const schema = {

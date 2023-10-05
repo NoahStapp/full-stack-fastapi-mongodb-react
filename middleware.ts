@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getUserProfile, isAdmin, loggedIn } from './app/slices/authSlice'
-import { store } from './app/stores/store'
-import { refreshTokens } from './app/slices/tokensSlice'
+import { getUserProfile, isAdmin, loggedIn } from './app/lib/slices/authSlice'
+import { store } from './app/lib/store'
+import { refreshTokens } from './app/lib/slices/tokensSlice'
 
 const redirectRoutes = ["/login", "/join", "/recover-password", "/reset-password"]
 const anonymousRoutes = ["/login", "/recover-password", "/reset-password", "/magic", "/totp"]

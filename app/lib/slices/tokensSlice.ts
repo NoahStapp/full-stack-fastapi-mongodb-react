@@ -3,7 +3,7 @@ import { apiAuth } from "../api"
 import { tokenExpired, tokenParser } from "../utilities"
 import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { addNotice } from "./toastsSlice";
-import { RootState } from "../stores/store";
+import { RootState } from "../store";
 
 interface TokensState {
     access_token: string,

@@ -1,11 +1,11 @@
 
 
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import type { RootState } from '../../stores/store'
+import { useAppDispatch, useAppSelector } from '../../lib/hooks'
+import type { RootState } from '../../lib/store'
 import { Menu, Transition } from "@headlessui/react"
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
-import { loggedIn, logOut } from '../../slices/authSlice'
+import { loggedIn, logOut } from '../../lib/slices/authSlice'
 import { useRouter } from 'next/router'
 
 const navigation = [
