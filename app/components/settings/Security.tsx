@@ -7,81 +7,92 @@ import { useAppDispatch, useAppSelector } from "../../hooks"
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react"
 import { RootState } from "../../stores/store"
+import { IEnableTOTP, INewTOTP, IUserProfileUpdate } from "../../interfaces"
+import { disableTOTPAuthentication, enableTOTPAuthentication, profile, updateUserProfile } from "../../slices/authSlice"
+import { refreshTokens, token } from "../../slices/tokensSlice"
 
-
-let profile = {} as IUserProfileUpdate
 const title = "Security"
 const redirectTOTP = "/settings"
-const totpEnabled = ref(false)
-const totpModal = ref(false)
-const totpNew = ref({} as INewTOTP)
-const totpClaim = ref({} as IEnableTOTP)
 const qrSize = 200
 
-const schema = {
-  original: { required: authStore.profile.password, min: 8, max: 64 },
-  password: { required: false, min: 8, max: 64 },
-  confirmation: { required: false, confirmed: "password" }
-}
+// const schema = {
+//   original: { required: authStore.profile.password, min: 8, max: 64 },
+//   password: { required: false, min: 8, max: 64 },
+//   confirmation: { required: false, confirmed: "password" }
+// }
 
-const totpSchema = {
-  claim: { required: true, min: 6, max: 7 }
-}
+// const totpSchema = {
+//   claim: { required: true, min: 6, max: 7 }
+// }
 
-onMounted( () => {
-  resetProfile()
-  totpEnabled.value = authStore.profile.totp
-})
-
-function resetProfile() {
-  profile = {
+const resetProfile = () => {
+  return {
     password: ""
   }
 }
 
-// @ts-ignore
-async function enableTOTP(values: any) {
-  totpClaim.value.claim = values.claim
-  await authStore.enableTOTPAuthentication(totpClaim.value)
-  resetForm()
-  totpModal.value = false 
-}
-
-// @ts-ignore
-async function submit(values: any) {
-  profile = {}
-  if ((!authStore.profile.password && !values.original) || 
-      (authStore.profile.password && values.original)) {
-    if (values.original) profile.original = values.original
-    if (values.password && values.password !== values.original) {
-      profile.password = values.password
-      await authStore.updateUserProfile(profile)
-    }
-    if (totpEnabled.value !== authStore.profile.totp && totpEnabled.value) {
-      await tokenStore.refreshTokens()
-      const { data: response } = await apiAuth.requestNewTOTP(tokenStore.token)
-      if (response.value) {
-        totpNew.value.key = response.value.key
-        totpNew.value.uri = response.value.uri
-        totpClaim.value.uri = response.value.uri
-        totpClaim.value.password = values.original
-        totpModal.value = true
-      }
-    }
-    if (totpEnabled.value !== authStore.profile.totp && !totpEnabled.value) {
-      await authStore.disableTOTPAuthentication(profile)
-    }
-    // resetForm()
-  }
-
-}
-
 export default function Security() {
+  const [updatedProfile, setProfile] = useState({} as IUserProfileUpdate)
+  const [totpEnabled, changeTotpEnabled] = useState(false)
+  const [totpModal, changeTotpModal] = useState(false)
+  const [totpNew, changeTotpNew] = useState({} as INewTOTP)
+  const [totpClaim, changeTotpClaim] = useState({} as IEnableTOTP)
+
+  const dispatch = useAppDispatch()
+  const currentProfile = useAppSelector((state: RootState) => profile(state))  
+  const accessToken = useAppSelector((state: RootState) => token(state))  
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const {
+    register: registerTotp,
+    handleSubmit: handleSubmitTotp,
+    formState: { errors: errorsTotp },
+  } = useForm();
+
+  useEffect(() => {
+    setProfile(resetProfile())
+    changeTotpEnabled(currentProfile.totp)
+  }, [])
+
+  // @ts-ignore
+  async function enableTOTP(values: any) {
+    totpClaim.claim = values.claim
+    await dispatch(enableTOTPAuthentication(totpClaim))
+    changeTotpModal(false)
+  }
+
+    // @ts-ignore
+  async function submit(values: any) {
+    let newProfile = {} as IUserProfileUpdate
+    if ((!currentProfile.password && !values.original) || 
+        (currentProfile.password && values.original)) {
+      if (values.original) newProfile.original = values.original
+      if (values.password && values.password !== values.original) {
+        newProfile.password = values.password
+        await dispatch(updateUserProfile(newProfile))
+      }
+      if (totpEnabled !== currentProfile.totp && totpEnabled) {
+        await dispatch(refreshTokens())
+        const res = await apiAuth.requestNewTOTP(accessToken)
+        if (res) {
+          totpNew.key = res.key
+          totpNew.uri = res.uri
+          totpClaim.uri = res.uri
+          totpClaim.password = values.original
+          changeTotpModal(true)
+        }
+      }
+      if (totpEnabled !== currentProfile.totp && !totpEnabled) {
+        await dispatch(disableTOTPAuthentication(newProfile))
+      }
+      // resetForm()
+    }
+  }
 
   return (
     <div className="shadow sm:overflow-hidden sm:rounded-md max-w-lg">
@@ -89,21 +100,24 @@ export default function Security() {
       <div className="space-y-6 bg-white py-6 px-4 sm:p-6">
         <div>
           <h3 className="text-lg font-medium leading-6 text-gray-900">{title}</h3>
-          <p v-if="!authStore.profile.password" className="mt-1 text-sm text-gray-500">
+          {!currentProfile.password ? (
+          <p className="mt-1 text-sm text-gray-500">
             Secure your account by adding a password, or enabling two-factor security. Or both. Any changes will 
             require you to enter your original password.
           </p>
-          <p v-else className="mt-1 text-sm text-gray-500">
+          ) : (
+          <p className="mt-1 text-sm text-gray-500">
             Secure your account further by enabling two-factor security. Any changes will require you to enter 
             your original password.
           </p>
+        )}
         </div>
 
         <div className="space-y-1">
           <label htmlFor="original" className="block text-sm font-medium text-gray-700">Original password</label>
           <div className="mt-1 group relative inline-block w-full">
-            <Field id="original" name="original" type="password" autocomplete="password" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
-            <ErrorMessage name="original" className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"/>
+            <input {...register("original")} id="original" name="original" type="password" autoComplete="password" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
+            {errors.original && <div id="original" className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"/>}
           </div>
         </div>
 
@@ -112,27 +126,27 @@ export default function Security() {
             <p className="text-sm font-medium text-rose-500 align-middle">
               Use two-factor security
             </p>
-            <Switch v-model="totpEnabled" className="group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2">
+            <Switch checked={totpEnabled} onChange={changeTotpEnabled} className="group relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2">
               <span className="sr-only">Use setting</span>
               <span aria-hidden="true" className="pointer-events-none absolute h-full w-full rounded-md bg-white" />
-              <span aria-hidden="true" className="[totpEnabled ? 'bg-rose-500' : 'bg-gray-200', 'pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out']" />
-              <span aria-hidden="true" className="[totpEnabled ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out']" />
+              <span aria-hidden="true" className={[totpEnabled ? 'bg-rose-500' : 'bg-gray-200', 'pointer-events-none absolute mx-auto h-4 w-9 rounded-full transition-colors duration-200 ease-in-out'].join(' ')} />
+              <span aria-hidden="true" className={[totpEnabled ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none absolute left-0 inline-block h-5 w-5 transform rounded-full border border-gray-200 bg-white shadow ring-0 transition-transform duration-200 ease-in-out'].join(' ')} />
             </Switch>
         </div>
       </div>
         <div className="space-y-1">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">New password</label>
           <div className="mt-1 group relative inline-block w-full">
-            <Field id="password" name="password" type="password" autocomplete="password" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
-            <ErrorMessage name="password" className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"/>
+            <input {...register("password")} id="password" name="password" type="password" autoComplete="password" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
+            {errors.password && <div id="password" className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"/>}
           </div>
         </div>
 
         <div className="space-y-1">
           <label htmlFor="confirmation" className="block text-sm font-medium text-gray-700">Repeat new password</label>
           <div className="mt-1 group relative inline-block w-full">
-            <Field id="confirmation" name="confirmation" type="password" autocomplete="confirmation" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
-            <ErrorMessage name="confirmation" className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"/>
+            <input {...register("confirmation")} id="confirmation" name="confirmation" type="password" autoComplete="confirmation" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
+            {errors.confirmation && <div id="confirmation" className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"/>}
           </div>
         </div>
       </div>
@@ -142,8 +156,8 @@ export default function Security() {
         </button>
       </div>
     </form>
-    <Transition as="template" show="totpModal">
-    <Dialog as="div" className="relative z-10" onClose={() => totpModal = false}>
+    <Transition as="template" show={totpModal}>
+    <Dialog as="div" className="relative z-10" onClose={() => changeTotpModal(false)}>
       <Transition.Child as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
       </Transition.Child>
@@ -192,11 +206,11 @@ export default function Security() {
                           <p>
                             Enter the code generated by your Authenticator app below to pair your account:
                           </p>
-                          <form onSubmit="enableTOTP" validation-schema="totpSchema">
+                          <form onSubmit={handleSubmitTotp(enableTOTP)} validation-schema="totpSchema">
                             <div className="space-y-1">
                               <label htmlFor="claim" className="block text-sm font-medium text-gray-700 mt-4">6-digit verification code</label>
                               <div className="mt-1 group relative inline-block w-full">
-                                <Field id="claim" name="claim" type="text" autocomplete="off" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
+                                <input {...registerTotp("claim")} id="claim" name="claim" type="text" autoComplete="off" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />
                               </div>
                             </div>
                             <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
@@ -204,7 +218,7 @@ export default function Security() {
                                 Submit
                               </button>
                               <button type="button" className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm" 
-                                onClick="totpModal = false" 
+                                onClick={() => changeTotpModal(false)} 
                                 ref="cancelButtonRef">
                                 Cancel
                               </button>

@@ -31,7 +31,7 @@ const redirectTOTP = "/totp"
 function PasswordBlock(register: UseFormRegister<FieldValues>, errors: FieldErrors<FieldValues>, oauth: boolean) {
     if (oauth) {
         return (
-            <div v-if="oauth" className="space-y-1">
+            <div className="space-y-1">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <div className="mt-1 group relative inline-block w-full">
             <input {...register("password")} id="password" name="password" type="password" autoComplete="password" className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm" />

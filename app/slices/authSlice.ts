@@ -172,11 +172,11 @@ export const sendEmailValidation = () =>
     const currentState = getState()
     if (currentState.tokens.access_token && !currentState.auth.email_validated) {
       try {
-        const { data: response } = await apiAuth.requestValidationEmail(currentState.tokens.access_token)
-        if (response.value) {
+        const res = await apiAuth.requestValidationEmail(currentState.tokens.access_token)
+        if (res) {
           dispatch(addNotice({
             title: "Validation sent",
-            content: response.value.msg,
+            content: res.msg,
           }))
         } else throw "Error"
       } catch (error) {
