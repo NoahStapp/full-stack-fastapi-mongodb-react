@@ -16,16 +16,23 @@ import {
 } from "react-hook-form";
 import Link from "next/link";
 
-// definePageMeta({
-//   layout: "authentication",
-//   middleware: ["anonymous"],
-// });
+const schema = {
+    email: { required: true },
+    password: { required: true, minLength: 8, maxLength: 64 },
+}
 
-// const schema = {
-//     email: { email: true, required: true },
-//     password: { min: 8, max: 64 },
-// }
-
+//@ts-ignore
+const renderError = (type: LiteralUnion<keyof RegisterOptions, string>) => {
+  const style = "absolute left-5 top-0 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
+  switch(type) {
+    case "required":
+      return <div className={style}>This field is required.</div>
+    case "minLength" || "maxLength":
+      return <div className={style}>Your password must be between 8 and 64 characters long.</div>
+    default:
+      return <></>
+  }
+}
 const redirectAfterLogin = "/";
 const redirectAfterMagic = "/magic";
 const redirectTOTP = "/totp";
@@ -46,16 +53,14 @@ function PasswordBlock(
         </label>
         <div className="mt-1 group relative inline-block w-full">
           <input
-            {...register("password")}
+            {...register("password", schema.password)}
             id="password"
             name="password"
             type="password"
             autoComplete="password"
             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm"
           />
-          {errors.email && (
-            <div className="absolute left-5 top-0 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700" />
-          )}
+          {errors.password && renderError(errors.password.type)}
         </div>
         <div className="text-sm text-right">
           <Link
@@ -157,7 +162,7 @@ export default function Page() {
                 </label>
                 <div className="mt-1 group relative inline-block w-full">
                   <input
-                    {...register("email")}
+                    {...register("email", schema.email)}
                     id="email"
                     name="email"
                     type="email"
@@ -166,7 +171,7 @@ export default function Page() {
                   />
                   {errors.email && (
                     <div className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700">
-                      Last name is required.
+                      This field is required.
                     </div>
                   )}
                 </div>

@@ -97,7 +97,7 @@ export default function ResetPassword() {
                       autoComplete="password"
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm"
                     />
-                    {errors.password && renderError(errors?.password?.type)}
+                    {errors.password && renderError(errors.password.type)}
                   </div>
                 </div>
 
@@ -122,7 +122,7 @@ export default function ResetPassword() {
                       autoComplete="confirmation"
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm"
                     />
-                    {errors.confirmation && renderError(errors?.confirmation?.type)}
+                    {errors.confirmation && renderError(errors.confirmation.type)}
                   </div>
                 </div>
                 <div>

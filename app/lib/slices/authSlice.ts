@@ -23,7 +23,7 @@ interface AuthState {
   email_validated: boolean;
   is_active: boolean;
   is_superuser: boolean;
-  full_name: string;
+  fullName: string;
   password: boolean;
   totp: boolean;
 }
@@ -34,7 +34,7 @@ const initialState: AuthState = {
   email_validated: false,
   is_active: false,
   is_superuser: false,
-  full_name: "",
+  fullName: "",
   password: false,
   totp: false,
 };
@@ -49,7 +49,7 @@ export const authSlice = createSlice({
       state.email_validated = action.payload.email_validated;
       state.is_active = action.payload.is_active;
       state.is_superuser = action.payload.is_superuser;
-      state.full_name = action.payload.full_name;
+      state.fullName = action.payload.fullName;
       state.password = action.payload.password;
       state.totp = action.payload.totp;
     },

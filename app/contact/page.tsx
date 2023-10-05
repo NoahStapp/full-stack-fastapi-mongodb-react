@@ -14,7 +14,7 @@ import { addNotice } from "../lib/slices/toastsSlice";
 import { useRouter } from "next/navigation";
 
 const schema = {
-  email: { email: true, required: true },
+  email: { required: true },
   message: { required: true },
 };
 
@@ -173,7 +173,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5 group relative inline-block w-full">
                   <input
-                    {...register("email")}
+                    {...register("email", schema.email)}
                     id="email-address"
                     name="email"
                     type="email"
@@ -182,7 +182,9 @@ export default function Contact() {
                     className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                   {errors.email && (
-                    <div className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700" />
+                    <div className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700">
+                      This field is required.
+                    </div>
                   )}
                 </div>
               </div>
@@ -195,7 +197,7 @@ export default function Contact() {
                 </label>
                 <div className="mt-2.5 group relative inline-block w-full">
                   <textarea
-                    {...register("message")}
+                    {...register("message", schema.message)}
                     id="contact-message"
                     name="message"
                     rows={4}
@@ -203,7 +205,9 @@ export default function Contact() {
                     className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                   {errors.message && (
-                    <div className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700" />
+                    <div className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700">
+                      This field is required.
+                    </div>
                   )}
                 </div>
               </div>

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 const redirectRoute = "/";
 const schema = {
-  email: { email: true, required: true },
+  email: { required: true },
 };
 
 export default function RecoverPassword() {
@@ -62,7 +62,7 @@ export default function RecoverPassword() {
                   </label>
                   <div className="mt-1 group relative inline-block w-full">
                     <input
-                      {...register("email")}
+                      {...register("email", schema.email)}
                       id="email"
                       name="email"
                       type="email"
@@ -73,7 +73,7 @@ export default function RecoverPassword() {
                       <div
                         id="email"
                         className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
-                      />
+                      >This field is required.</div>
                     )}
                   </div>
                   <div className="text-sm text-right">
