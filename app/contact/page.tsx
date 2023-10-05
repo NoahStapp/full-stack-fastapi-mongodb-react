@@ -6,7 +6,7 @@ import {
   EnvelopeIcon,
   PhoneIcon,
 } from "@heroicons/react/24/outline";
-import { ISendEmail } from "../interfaces";
+import { ISendEmail } from "../lib/interfaces";
 import { apiService } from "../lib/api";
 import { useAppDispatch } from "../lib/hooks";
 import { useForm } from "react-hook-form";

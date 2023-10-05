@@ -1,6 +1,6 @@
 import { apiAuth } from "../../lib/api";
 import { generateUUID } from "../../lib/utilities";
-import { IUserProfileCreate } from "../../interfaces";
+import { IUserProfileCreate } from "../../lib/interfaces";
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { refreshTokens, token } from "../../lib/slices/tokensSlice";

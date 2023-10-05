@@ -8,7 +8,7 @@ import {
   INewTOTP,
   IEnableTOTP,
   IMsg,
-} from "@/interfaces";
+} from "../interfaces";
 import { apiCore } from "./core";
 
 export const apiAuth = {

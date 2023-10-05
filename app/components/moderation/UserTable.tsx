@@ -1,5 +1,5 @@
 import { apiAuth } from "../../lib/api";
-import { IUserProfile } from "../../interfaces";
+import { IUserProfile } from "../../lib/interfaces";
 import CheckState from "./CheckState";
 import ToggleActive from "./ToggleActive";
 import ToggleMod from "./ToggleMod";

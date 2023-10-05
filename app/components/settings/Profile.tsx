@@ -1,6 +1,6 @@
 "use client";
 
-import { IUserProfileUpdate } from "../../interfaces";
+import { IUserProfileUpdate } from "../../lib/interfaces";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { useForm } from "react-hook-form";
 import { profile, updateUserProfile } from "../../lib/slices/authSlice";

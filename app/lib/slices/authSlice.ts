@@ -10,7 +10,7 @@ import {
   IUserProfile,
   IUserProfileUpdate,
   IWebToken,
-} from "../../interfaces";
+} from "../interfaces";
 import { RootState } from "../store";
 import { tokenIsTOTP, tokenParser } from "../utilities";
 import { addNotice } from "./toastsSlice";

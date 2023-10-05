@@ -4,7 +4,7 @@ import {
   createAsyncThunk,
   createSlice,
 } from "@reduxjs/toolkit";
-import { INotification } from "@/interfaces";
+import { INotification } from "../interfaces";
 import { generateUUID } from "../utilities";
 import { RootState } from "../store";
 

@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { RootState } from "../../lib/store";
-import { IEnableTOTP, INewTOTP, IUserProfileUpdate } from "../../interfaces";
+import { IEnableTOTP, INewTOTP, IUserProfileUpdate } from "../../lib/interfaces";
 import {
   disableTOTPAuthentication,
   enableTOTPAuthentication,

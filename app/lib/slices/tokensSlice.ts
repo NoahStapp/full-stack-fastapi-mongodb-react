@@ -1,4 +1,4 @@
-import { ITokenResponse, IWebToken } from "@/interfaces";
+import { ITokenResponse, IWebToken } from "../interfaces";
 import { apiAuth } from "../api";
 import { tokenExpired, tokenParser } from "../utilities";
 import { Dispatch, PayloadAction, createSlice } from "@reduxjs/toolkit";

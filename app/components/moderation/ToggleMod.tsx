@@ -1,5 +1,5 @@
 import { apiAuth } from "../../lib/api";
-import { IUserProfileUpdate } from "../../interfaces";
+import { IUserProfileUpdate } from "../../lib/interfaces";
 import CheckToggle from "./CheckToggle";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { RootState } from "../../lib/store";
