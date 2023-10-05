@@ -7,10 +7,26 @@ import { resetPassword } from "../lib/slices/authSlice";
 import { useEffect } from "react";
 
 const schema = {
-  password: { required: true, min: 8 },
-  confirmation: { required: true, confirmed: "password" },
-};
+  password: { required: true, minLength: 8, maxLength: 64 },
+  confirmation: { required: true}
+}
+
 const redirectRoute = "/login";
+
+//@ts-ignore
+const renderError = (type: LiteralUnion<keyof RegisterOptions, string>) => {
+  const style = "absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
+  switch(type) {
+    case "required":
+      return <div className={style}>This field is required.</div>
+    case "minLength" || "maxLength":
+      return <div className={style}>Your password must be between 8 and 64 characters long.</div>
+    case "match":
+      return <div className={style}>Your passwords do not match.</div>
+    default:
+      return <></>
+  }
+}
 
 export default function ResetPassword() {
   const dispatch = useAppDispatch();
@@ -21,6 +37,7 @@ export default function ResetPassword() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -38,9 +55,9 @@ export default function ResetPassword() {
     router.push(redirectRoute);
   }
 
-  //   useEffect(() => {
-  //     if (!query || !query.get("token")) router.push("/")
-  //   })
+    useEffect(() => {
+      if (!query || !query.get("token")) router.push("/")
+    })
 
   return (
     <main className="flex min-h-full">
@@ -73,19 +90,14 @@ export default function ResetPassword() {
                   </label>
                   <div className="mt-1 group relative inline-block w-full">
                     <input
-                      {...register("password")}
+                      {...register("password", schema.password)}
                       id="password"
                       name="password"
                       type="password"
                       autoComplete="password"
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm"
                     />
-                    {errors.password && (
-                      <div
-                        id="password"
-                        className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
-                      />
-                    )}
+                    {errors.password && renderError(errors?.password?.type)}
                   </div>
                 </div>
 
@@ -98,19 +110,19 @@ export default function ResetPassword() {
                   </label>
                   <div className="mt-1 group relative inline-block w-full">
                     <input
-                      {...register("confirmation")}
+                      {...register("confirmation", {
+                      ...schema.confirmation,
+                      validate: {
+                        match: val => (watch('password') == val) 
+                      }
+                    })}
                       id="confirmation"
                       name="confirmation"
                       type="password"
                       autoComplete="confirmation"
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-rose-600 focus:outline-none focus:ring-rose-600 sm:text-sm"
                     />
-                    {errors.password && (
-                      <div
-                        id="confirmation"
-                        className="absolute left-5 top-5 translate-y-full w-48 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm after:content-[''] after:absolute after:left-1/2 after:bottom-[100%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700"
-                      />
-                    )}
+                    {errors.confirmation && renderError(errors?.confirmation?.type)}
                   </div>
                 </div>
                 <div>
