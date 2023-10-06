@@ -115,7 +115,7 @@ export default function Page() {
               </svg>
             </div>
             <div className="relative -mr-40 pl-4 sm:mx-auto sm:max-w-3xl sm:px-0 lg:h-full lg:max-w-none lg:pl-12">
-              <Image
+              <img
                 className="w-full rounded-md shadow-xl ring-1 ring-black ring-opacity-5 lg:h-full lg:w-auto lg:max-w-none"
                 src="https://images.unsplash.com/photo-1465661668481-15b9405ca28e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&flip=h&w=1074&q=80"
                 alt=""

@@ -5,7 +5,7 @@ import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import Image from "next/image"
 import { loggedIn, logOut } from "../../lib/slices/authSlice"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 const navigation = [{ name: "Settings", to: "/settings" }]
 const redirectRoute = "/"
@@ -42,7 +42,7 @@ const renderUser = (loggedIn: boolean) => {
       <div>
         <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
           <span className="sr-only">Open user menu</span>
-          <Image
+          <img
             className="h-8 w-8 rounded-full"
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
             alt=""

@@ -59,7 +59,7 @@ export default function Magic() {
         </div>
       </div>
       <div className="relative hidden w-0 flex-1 lg:block">
-        <Image
+        <img
           className="absolute inset-0 h-full w-full object-cover"
           src="https://images.unsplash.com/photo-1561487138-99ccf59b135c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
           alt=""
