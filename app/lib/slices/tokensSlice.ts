@@ -29,7 +29,7 @@ export const tokensSlice = createSlice({
       state.refresh_token = action.payload.refresh_token
       state.token_type = action.payload.token_type
     },
-    deleteTokens: (state: TokensState) => {
+    deleteTokens: () => {
       initialState
     },
   },

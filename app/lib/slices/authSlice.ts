@@ -8,7 +8,7 @@ import {
 } from "../interfaces"
 import { RootState } from "../store"
 import { tokenIsTOTP, tokenParser } from "../utilities"
-import { addNotice } from "./toastsSlice"
+import { addNotice, deleteNotices } from "./toastsSlice"
 import { apiAuth } from "../api"
 import { setMagicToken, deleteTokens, getTokens } from "./tokensSlice"
 
@@ -57,7 +57,7 @@ export const authSlice = createSlice({
     setEmailValidation: (state: AuthState, action: PayloadAction<boolean>) => {
       state.email_validated = action.payload
     },
-    logOut: () => {
+    deleteAuth: () => {
       initialState
     },
   },
@@ -67,7 +67,7 @@ export const {
   setUserProfile,
   setTOTPAuthentication,
   setEmailValidation,
-  logOut,
+  deleteAuth,
 } = authSlice.actions
 
 export const isAdmin = (state: RootState) => {
@@ -94,7 +94,13 @@ export const logIn = (payload: { username: string; password?: string }) =>
       }
   }
 
-export const getUserProfile = (token: string) => async (dispatch: Dispatch) => {
+export const logOut = () => (dispatch: Dispatch) => {
+    dispatch(deleteAuth())
+    dispatch(deleteTokens())
+    dispatch(deleteNotices())
+}
+
+export const getUserProfile = (token: string) => async (dispatch: ThunkDispatch<any, void, Action>) => {
   console.log(`TOKEN: ${token}`)
   if (token && !tokenIsTOTP(token)) {
     try {
