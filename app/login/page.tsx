@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "../lib/hooks"
 import type { RootState } from "../lib/store"
-import { getUserProfile, loggedIn } from "../lib/slices/authSlice"
+import { getUserProfile, logIn, loggedIn } from "../lib/slices/authSlice"
 import { getTokens } from "../lib/slices/tokensSlice"
 import { useRouter, useSearchParams } from "next/navigation"
 import { tokenIsTOTP, tokenParser } from "../lib/utilities"
@@ -108,9 +108,9 @@ export default function Page() {
   const [oauth, setOauth] = useState(false)
   const dispatch = useAppDispatch()
   const accessToken = useAppSelector(
-    (state: RootState) => state.tokens.access_token,
+    (state) => state.tokens.access_token,
   )
-  const isLoggedIn = useAppSelector((state: RootState) => loggedIn(state))
+  const isLoggedIn = useAppSelector((state) => loggedIn(state))
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -127,18 +127,20 @@ export default function Page() {
 
   async function submit(data: FieldValues) {
     await dispatch(
-      getTokens({ username: data["email"], password: data["password"] }),
+      logIn({ username: data["email"], password: data["password"] }),
     )
-    await dispatch(getUserProfile(accessToken))
-    if (isLoggedIn) return redirectTo(redirectAfterLogin)
-    if (accessToken && tokenIsTOTP(accessToken)) return redirectTo(redirectTOTP)
-    if (accessToken && tokenParser(accessToken).hasOwnProperty("fingerprint"))
-      return redirectTo(redirectAfterMagic)
   }
 
   useEffect(() => {
     if (searchParams && searchParams.get("oauth")) setOauth(true)
   }, [searchParams])
+
+  useEffect(() => {
+    if (isLoggedIn) return redirectTo(redirectAfterLogin)
+    if (accessToken && tokenIsTOTP(accessToken)) return redirectTo(redirectTOTP)
+    if (accessToken && tokenParser(accessToken).hasOwnProperty("fingerprint"))
+      return redirectTo(redirectAfterMagic)
+  }, [isLoggedIn, accessToken])
 
   return (
     <main className="flex min-h-full">

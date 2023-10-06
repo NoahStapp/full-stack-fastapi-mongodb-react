@@ -20,7 +20,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "gray-matter": "^4.0.3",
     "next": "^13.5.4",
-    "react": "latest",
+    "react": "18.2.0",
     "react-dom": "latest",
     "react-hook-form": "^7.46.2",
     "react-redux": "^8.1.2",

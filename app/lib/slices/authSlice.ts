@@ -1,4 +1,4 @@
-import { Dispatch, PayloadAction, createSlice, current } from "@reduxjs/toolkit"
+import { Action, Dispatch, PayloadAction, ThunkDispatch, createSlice, current } from "@reduxjs/toolkit"
 import {
   IEnableTOTP,
   IUserOpenProfileCreate,
@@ -10,7 +10,7 @@ import { RootState } from "../store"
 import { tokenIsTOTP, tokenParser } from "../utilities"
 import { addNotice } from "./toastsSlice"
 import { apiAuth } from "../api"
-import { setMagicToken, deleteTokens } from "./tokensSlice"
+import { setMagicToken, deleteTokens, getTokens } from "./tokensSlice"
 
 interface AuthState {
   id: string
@@ -76,7 +76,26 @@ export const isAdmin = (state: RootState) => {
 export const profile = (state: RootState) => state.auth
 export const loggedIn = (state: RootState) => state.auth.id !== ""
 
+export const logIn = (payload: { username: string; password?: string }) =>
+  async (dispatch: ThunkDispatch<any, void, Action>, getState: () => RootState) => {
+      try {
+        await dispatch(getTokens(payload))
+        const token = getState().tokens.access_token
+        await dispatch(getUserProfile(token))
+      } catch (error) {
+        dispatch(
+          addNotice({
+            title: "Login error",
+            content:
+              "Please check your details or internet connection and try again.",
+            icon: "error",
+          }),
+        )
+      }
+  }
+
 export const getUserProfile = (token: string) => async (dispatch: Dispatch) => {
+  console.log(`TOKEN: ${token}`)
   if (token && !tokenIsTOTP(token)) {
     try {
       const res = await apiAuth.getProfile(token)
