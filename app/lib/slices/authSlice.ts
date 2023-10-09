@@ -1,4 +1,11 @@
-import { Action, Dispatch, PayloadAction, ThunkDispatch, createSlice, current } from "@reduxjs/toolkit"
+import {
+  Action,
+  Dispatch,
+  PayloadAction,
+  ThunkDispatch,
+  createSlice,
+  current,
+} from "@reduxjs/toolkit"
 import {
   IEnableTOTP,
   IUserOpenProfileCreate,
@@ -10,7 +17,13 @@ import { RootState } from "../store"
 import { tokenIsTOTP, tokenParser } from "../utilities"
 import { addNotice, deleteNotices } from "./toastsSlice"
 import { apiAuth } from "../api"
-import { setMagicToken, deleteTokens, getTokens, validateMagicTokens, validateTOTPClaim } from "./tokensSlice"
+import {
+  setMagicToken,
+  deleteTokens,
+  getTokens,
+  validateMagicTokens,
+  validateTOTPClaim,
+} from "./tokensSlice"
 
 interface AuthState {
   id: string
@@ -58,7 +71,7 @@ export const authSlice = createSlice({
       state.email_validated = action.payload
     },
     deleteAuth: () => {
-      initialState
+      return initialState
     },
   },
 })
@@ -76,87 +89,100 @@ export const isAdmin = (state: RootState) => {
 export const profile = (state: RootState) => state.auth
 export const loggedIn = (state: RootState) => state.auth.id !== ""
 
-export const login = (payload: { username: string; password?: string }) =>
-  async (dispatch: ThunkDispatch<any, void, Action>, getState: () => RootState) => {
-      try {
-        await dispatch(getTokens(payload))
-        const token = getState().tokens.access_token
-        await dispatch(getUserProfile(token))
-      } catch (error) {
-        dispatch(
-          addNotice({
-            title: "Login error",
-            content:
-              "Please check your details or internet connection and try again.",
-            icon: "error",
-          }),
-        )
-      }
-  }
-
-export const magicLogin = (payload: { token: string }) =>
-  async (dispatch: ThunkDispatch<any, void, Action>, getState: () => RootState) => {
-      try {
-        await dispatch(validateMagicTokens(payload.token))
-        const token = getState().tokens.access_token
-        await dispatch(getUserProfile(token))
-      } catch (error) {
-        dispatch(
-          addNotice({
-            title: "Login error",
-            content:
-              "Please check your details or internet connection and try again.",
-            icon: "error",
-          })
-        )
-        dispatch(logout())
-      }
-  }
-
-export const totpLogin = (payload: { claim: string }) =>
-  async (dispatch: ThunkDispatch<any, void, Action>, getState: () => RootState) => {
-      try {
-        await dispatch(validateTOTPClaim(payload.claim))
-        const token = getState().tokens.access_token
-        await dispatch(getUserProfile(token))
-      } catch (error) {
-        dispatch(
-          addNotice({
-            title: "Login error",
-            content:
-              "Please check your details or internet connection and try again.",
-            icon: "error",
-          })
-        )
-        dispatch(logout())
-      }
-  }
-
-export const logout = () => (dispatch: Dispatch) => {
-    dispatch(deleteAuth())
-    dispatch(deleteTokens())
-    dispatch(deleteNotices())
-}
-
-export const getUserProfile = (token: string) => async (dispatch: ThunkDispatch<any, void, Action>) => {
-  console.log(`TOKEN: ${token}`)
-  if (token && !tokenIsTOTP(token)) {
+export const login =
+  (payload: { username: string; password?: string }) =>
+  async (
+    dispatch: ThunkDispatch<any, void, Action>,
+    getState: () => RootState,
+  ) => {
     try {
-      const res = await apiAuth.getProfile(token)
-      if (res) dispatch(setUserProfile(res))
+      await dispatch(getTokens(payload))
+      const token = getState().tokens.access_token
+      await dispatch(getUserProfile(token))
     } catch (error) {
       dispatch(
         addNotice({
           title: "Login error",
           content:
-            "Please check your details, or internet connection, and try again.",
+            "Please check your details or internet connection and try again.",
+          icon: "error",
+        }),
+      )
+    }
+  }
+
+export const magicLogin =
+  (payload: { token: string }) =>
+  async (
+    dispatch: ThunkDispatch<any, void, Action>,
+    getState: () => RootState,
+  ) => {
+    try {
+      await dispatch(validateMagicTokens(payload.token))
+      const token = getState().tokens.access_token
+      await dispatch(getUserProfile(token))
+    } catch (error) {
+      dispatch(
+        addNotice({
+          title: "Login error",
+          content:
+            "Please check your details or internet connection and try again.",
           icon: "error",
         }),
       )
       dispatch(logout())
     }
   }
+
+export const totpLogin =
+  (payload: { claim: string }) =>
+  async (
+    dispatch: ThunkDispatch<any, void, Action>,
+    getState: () => RootState,
+  ) => {
+    try {
+      await dispatch(validateTOTPClaim(payload.claim))
+      const token = getState().tokens.access_token
+      await dispatch(getUserProfile(token))
+    } catch (error) {
+      dispatch(
+        addNotice({
+          title: "Login error",
+          content:
+            "Please check your details or internet connection and try again.",
+          icon: "error",
+        }),
+      )
+      dispatch(logout())
+    }
+  }
+
+export const logout = () => (dispatch: Dispatch) => {
+  dispatch(deleteAuth())
+  dispatch(deleteTokens())
+  dispatch(deleteNotices())
 }
+
+export const getUserProfile =
+  (token: string) => async (dispatch: ThunkDispatch<any, void, Action>) => {
+    console.log(`TOKEN: ${token}`)
+    if (token && !tokenIsTOTP(token)) {
+      try {
+        const res = await apiAuth.getProfile(token)
+        if (res) dispatch(setUserProfile(res))
+      } catch (error) {
+        dispatch(
+          addNotice({
+            title: "Login error",
+            content:
+              "Please check your details, or internet connection, and try again.",
+            icon: "error",
+          }),
+        )
+        dispatch(logout())
+      }
+    }
+  }
 
 export const createUserProfile =
   (payload: IUserOpenProfileCreate) => async (dispatch: Dispatch) => {

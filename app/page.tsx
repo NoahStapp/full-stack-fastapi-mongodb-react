@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { ChevronRightIcon } from "@heroicons/react/20/solid"
 import Link from "next/link"
@@ -12,7 +12,7 @@ import { token } from "./lib/slices/tokensSlice"
 const github = {
   name: "GitHub",
   href: "https://github.com/whythawk/full-stack-fastapi-postgresql",
-  icon:  () => {
+  icon: () => {
     return (
       <svg
         fill="currentColor"
@@ -27,7 +27,7 @@ const github = {
         />
       </svg>
     )
-  }
+  },
 }
 
 const redirectTOTP = "/totp"
@@ -51,13 +51,14 @@ export default function Page() {
             resolve(true)
           }, 100)
         })
-        if (!isLoggedIn) await dispatch(magicLogin({token: query.get("magic") as string}))
+        if (!isLoggedIn)
+          await dispatch(magicLogin({ token: query.get("magic") as string }))
         if (tokenIsTOTP(accessToken)) router.push(redirectTOTP)
-        else router.push(redirectAfterLogin) 
+        else router.push(redirectAfterLogin)
       }
     }
     load()
-  }, [])
+  })
   return (
     <main>
       <div className="overflow-hidden pt-8 sm:pt-12 lg:relative lg:py-48">
@@ -75,10 +76,15 @@ export default function Page() {
                   <a href={github.href} className="inline-flex space-x-4">
                     <span className="inline-flex items-center space-x-1 text-sm font-medium text-rose-500">
                       <span className="inline-flex items-center space-x-1 text-sm font-medium text-rose-400">
-                        <span className="h-5 w-5" aria-hidden="true" >{github.icon()}</span>
+                        <span className="h-5 w-5" aria-hidden="true">
+                          {github.icon()}
+                        </span>
                       </span>
                       <span>Source repository</span>
-                      <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                      <ChevronRightIcon
+                        className="h-5 w-5"
+                        aria-hidden="true"
+                      />
                     </span>
                   </a>
                 </div>

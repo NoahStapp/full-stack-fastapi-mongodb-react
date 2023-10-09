@@ -2,7 +2,7 @@ import "./assets/css/main.css"
 import type { Metadata } from "next"
 import Navigation from "./components/Navigation"
 import Notification from "./components/Notification"
-import { ReduxProvider } from "./lib/reduxProvider"
+import ReduxProvider from "./lib/reduxProvider"
 import Footer from "./components/Footer"
 
 export const metadata: Metadata = {

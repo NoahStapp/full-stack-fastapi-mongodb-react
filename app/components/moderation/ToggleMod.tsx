@@ -1,3 +1,5 @@
+"use client"
+
 import { apiAuth } from "../../lib/api"
 import { IUserProfileUpdate } from "../../lib/interfaces"
 import CheckToggle from "./CheckToggle"

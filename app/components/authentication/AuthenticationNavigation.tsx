@@ -1,3 +1,5 @@
+"use client"
+
 import { useAppDispatch, useAppSelector } from "../../lib/hooks"
 import type { RootState } from "../../lib/store"
 import { Menu, Transition } from "@headlessui/react"
@@ -5,24 +7,28 @@ import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { loggedIn, logout } from "../../lib/slices/authSlice"
 import { useRouter } from "next/navigation"
+import dynamic from "next/dynamic"
 
 const navigation = [{ name: "Settings", to: "/settings" }]
 const redirectRoute = "/"
+
+// const NoSSR = dynamic(() => import('../components/no-ssr'), { ssr: false })
 
 const renderNavLinks = () => {
   return navigation.map((nav) => (
     <Menu.Item key={nav.name}>
       {({ active }) => (
-      <a
-        href={nav.to}
-        key={nav.name}
-        className={[
-          active ? "bg-gray-100 cursor-pointer" : "",
-          "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
-        ].join(" ")}>
-        {nav.name}
-      </a>
-    )}
+        <a
+          href={nav.to}
+          key={nav.name}
+          className={[
+            active ? "bg-gray-100 cursor-pointer" : "",
+            "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+          ].join(" ")}
+        >
+          {nav.name}
+        </a>
+      )}
     </Menu.Item>
   ))
 }
@@ -62,7 +68,7 @@ export default function AuthenticationNavigation() {
   }
 
   return (
-    <div>
+    <div suppressHydrationWarning={true}>
       {/* <!-- Profile dropdown --> */}
       <Menu as="div" className="relative ml-3">
         {renderUser(isLoggedIn)}
@@ -74,7 +80,7 @@ export default function AuthenticationNavigation() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             {renderNavLinks()}
             <Menu.Item>
               {({ active }) => (

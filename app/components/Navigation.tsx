@@ -4,7 +4,11 @@ import { Disclosure } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import AlertsButton from "./alerts/AlertsButton"
-import AuthenticationNavigation from "./authentication/AuthenticationNavigation"
+import dynamic from "next/dynamic"
+const AuthenticationNavigation = dynamic(
+  () => import("./authentication/AuthenticationNavigation"),
+  { ssr: false },
+)
 
 const navigation = [
   { name: "About", to: "/about" },

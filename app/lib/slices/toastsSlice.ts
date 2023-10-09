@@ -34,7 +34,7 @@ export const toastsSlice = createSlice({
       )
     },
     deleteNotices: () => {
-      initialState
+      return initialState
     },
   },
 })

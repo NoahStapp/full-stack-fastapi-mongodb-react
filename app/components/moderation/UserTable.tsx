@@ -1,3 +1,5 @@
+"use client"
+
 import { apiAuth } from "../../lib/api"
 import { IUserProfile } from "../../lib/interfaces"
 import CheckState from "./CheckState"

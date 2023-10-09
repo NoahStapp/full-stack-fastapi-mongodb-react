@@ -1,3 +1,5 @@
+"use client"
+
 import { apiAuth } from "../../lib/api"
 import { generateUUID } from "../../lib/utilities"
 import { IUserProfileCreate } from "../../lib/interfaces"

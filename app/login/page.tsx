@@ -1,9 +1,7 @@
 "use client"
 
 import { useAppDispatch, useAppSelector } from "../lib/hooks"
-import type { RootState } from "../lib/store"
-import { getUserProfile, login, loggedIn } from "../lib/slices/authSlice"
-import { getTokens } from "../lib/slices/tokensSlice"
+import { login, loggedIn } from "../lib/slices/authSlice"
 import { useRouter, useSearchParams } from "next/navigation"
 import { tokenIsTOTP, tokenParser } from "../lib/utilities"
 import { Switch } from "@headlessui/react"
@@ -15,7 +13,6 @@ import {
   useForm,
 } from "react-hook-form"
 import Link from "next/link"
-import Image from "next/image"
 
 const schema = {
   email: { required: true },
@@ -107,9 +104,7 @@ function LoginMessage(oauth: boolean) {
 export default function Page() {
   const [oauth, setOauth] = useState(false)
   const dispatch = useAppDispatch()
-  const accessToken = useAppSelector(
-    (state) => state.tokens.access_token,
-  )
+  const accessToken = useAppSelector((state) => state.tokens.access_token)
   const isLoggedIn = useAppSelector((state) => loggedIn(state))
 
   const searchParams = useSearchParams()
@@ -140,7 +135,7 @@ export default function Page() {
     if (accessToken && tokenIsTOTP(accessToken)) return redirectTo(redirectTOTP)
     if (accessToken && tokenParser(accessToken).hasOwnProperty("fingerprint"))
       return redirectTo(redirectAfterMagic)
-  }, [isLoggedIn, accessToken])
+  })
 
   return (
     <main className="flex min-h-full">
