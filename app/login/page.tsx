@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "../lib/hooks"
 import type { RootState } from "../lib/store"
-import { getUserProfile, logIn, loggedIn } from "../lib/slices/authSlice"
+import { getUserProfile, login, loggedIn } from "../lib/slices/authSlice"
 import { getTokens } from "../lib/slices/tokensSlice"
 import { useRouter, useSearchParams } from "next/navigation"
 import { tokenIsTOTP, tokenParser } from "../lib/utilities"
@@ -127,7 +127,7 @@ export default function Page() {
 
   async function submit(data: FieldValues) {
     await dispatch(
-      logIn({ username: data["email"], password: data["password"] }),
+      login({ username: data["email"], password: data["password"] }),
     )
   }
 

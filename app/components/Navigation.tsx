@@ -3,7 +3,6 @@
 import { Disclosure } from "@headlessui/react"
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
-import Image from "next/image"
 import AlertsButton from "./alerts/AlertsButton"
 import AuthenticationNavigation from "./authentication/AuthenticationNavigation"
 
