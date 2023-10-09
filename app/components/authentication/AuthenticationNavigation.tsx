@@ -7,18 +7,15 @@ import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { loggedIn, logout } from "../../lib/slices/authSlice"
 import { useRouter } from "next/navigation"
-import dynamic from "next/dynamic"
 
 const navigation = [{ name: "Settings", to: "/settings" }]
 const redirectRoute = "/"
-
-// const NoSSR = dynamic(() => import('../components/no-ssr'), { ssr: false })
 
 const renderNavLinks = () => {
   return navigation.map((nav) => (
     <Menu.Item key={nav.name}>
       {({ active }) => (
-        <a
+        <Link
           href={nav.to}
           key={nav.name}
           className={[
@@ -27,7 +24,7 @@ const renderNavLinks = () => {
           ].join(" ")}
         >
           {nav.name}
-        </a>
+        </Link>
       )}
     </Menu.Item>
   ))
@@ -68,36 +65,33 @@ export default function AuthenticationNavigation() {
   }
 
   return (
-    <div suppressHydrationWarning={true}>
-      {/* <!-- Profile dropdown --> */}
-      <Menu as="div" className="relative ml-3">
-        {renderUser(isLoggedIn)}
-        <Transition
-          enter="transition ease-out duration-200"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {renderNavLinks()}
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  className={[
-                    active ? "bg-gray-100 cursor-pointer" : "",
-                    "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
-                  ].join(" ")}
-                  onClick={() => logoutUser()}
-                >
-                  Logout
-                </a>
-              )}
-            </Menu.Item>
-          </Menu.Items>
-        </Transition>
-      </Menu>
-    </div>
+    <Menu as="div" className="z-10 relative ml-3">
+      {renderUser(isLoggedIn)}
+      <Transition
+        enter="transition ease-out duration-200"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          {renderNavLinks()}
+          <Menu.Item>
+            {({ active }) => (
+              <a
+                className={[
+                  active ? "bg-gray-100 cursor-pointer" : "",
+                  "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                ].join(" ")}
+                onClick={() => logoutUser()}
+              >
+                Logout
+              </a>
+            )}
+          </Menu.Item>
+        </Menu.Items>
+      </Transition>
+    </Menu>
   )
 }
