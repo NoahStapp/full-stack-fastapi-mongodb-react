@@ -8,7 +8,6 @@ import { useAppSelector } from "../lib/hooks"
 import Link from "next/link"
 import { RootState } from "../lib/store"
 import { useRouter } from "next/navigation"
-import Image from "next/image"
 
 const redirectRoute = "/login"
 
@@ -23,7 +22,7 @@ export default function Magic() {
     ) {
       router.push(redirectRoute)
     }
-  })
+  }) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className="flex min-h-full">

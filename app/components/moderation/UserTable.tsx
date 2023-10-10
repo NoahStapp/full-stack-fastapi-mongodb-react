@@ -58,7 +58,7 @@ export default function UserTable() {
     }
 
     fetchUsers()
-  })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="shadow sm:overflow-hidden sm:rounded-md min-w-max">

@@ -45,7 +45,11 @@ export const getTokens = (payload: { username: string; password?: string }) => {
           payload.username,
           payload.password,
         )
-        dispatch(setTokens(response))
+        if (response.access_token) {
+          dispatch(setTokens(response))
+        } else {
+          throw "error"
+        }
       } else {
         const response = await apiAuth.loginWithMagicLink(payload.username)
         dispatch(setMagicToken(response))
@@ -54,8 +58,7 @@ export const getTokens = (payload: { username: string; password?: string }) => {
       dispatch(
         addNotice({
           title: "Login error",
-          content:
-            "Ensure you're using the same browser and that the token hasn't expired.",
+          content: "Your email and/or password is incorrect. Please try again.",
           icon: "error",
         }),
       )

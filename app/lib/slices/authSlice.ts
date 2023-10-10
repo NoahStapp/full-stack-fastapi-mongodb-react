@@ -165,7 +165,6 @@ export const logout = () => (dispatch: Dispatch) => {
 
 export const getUserProfile =
   (token: string) => async (dispatch: ThunkDispatch<any, void, Action>) => {
-    console.log(`TOKEN: ${token}`)
     if (token && !tokenIsTOTP(token)) {
       try {
         const res = await apiAuth.getProfile(token)

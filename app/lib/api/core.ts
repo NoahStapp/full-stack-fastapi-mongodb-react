@@ -4,6 +4,7 @@ export const apiCore = {
     return {
       "Cache-Control": "no-cache",
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     }
   },
 }

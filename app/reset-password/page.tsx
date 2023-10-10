@@ -61,7 +61,7 @@ export default function ResetPassword() {
 
   useEffect(() => {
     if (!query || !query.get("token")) router.push("/")
-  })
+  }) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className="flex min-h-full">

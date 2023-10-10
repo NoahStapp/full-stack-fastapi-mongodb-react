@@ -53,7 +53,8 @@ export default function Page() {
       }
     }
     load()
-  })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <main>
       <div className="overflow-hidden pt-8 sm:pt-12 lg:relative lg:py-48">

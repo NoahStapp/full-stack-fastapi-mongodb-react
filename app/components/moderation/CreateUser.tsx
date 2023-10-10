@@ -12,6 +12,7 @@ import { addNotice } from "../../lib/slices/toastsSlice"
 export default function CreateUser() {
   const dispatch = useAppDispatch()
   const accessToken = useAppSelector((state: RootState) => token(state))
+  const state = useAppSelector((state: RootState) => state)
 
   const { register, handleSubmit } = useForm()
 
@@ -25,7 +26,7 @@ export default function CreateUser() {
         fullName: values.fullName ? values.fullName : "",
       }
       const res = await apiAuth.createUserProfile(accessToken, data)
-      if (!res) {
+      if (!res.id) {
         dispatch(
           addNotice({
             title: "Update error",

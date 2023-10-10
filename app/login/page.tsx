@@ -135,7 +135,7 @@ export default function Page() {
     if (accessToken && tokenIsTOTP(accessToken)) return redirectTo(redirectTOTP)
     if (accessToken && tokenParser(accessToken).hasOwnProperty("fingerprint"))
       return redirectTo(redirectAfterMagic)
-  })
+  }, [isLoggedIn, accessToken]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <main className="flex min-h-full">
