@@ -24,6 +24,8 @@ import {
   validateMagicTokens,
   validateTOTPClaim,
 } from "./tokensSlice"
+import { PURGE, purgeStoredState } from "redux-persist"
+import { perstistor } from "../reduxProvider"
 
 interface AuthState {
   id: string
@@ -161,6 +163,11 @@ export const logout = () => (dispatch: Dispatch) => {
   dispatch(deleteAuth())
   dispatch(deleteTokens())
   dispatch(deleteNotices())
+  dispatch({
+    type: PURGE,
+    key: "root",
+    result: () => null,
+  })
 }
 
 export const getUserProfile =
